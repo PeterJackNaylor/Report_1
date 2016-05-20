@@ -43,18 +43,16 @@
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
 \usepackage{algorithm2e}
-\newcommand{\algorithmicrequire}{\textbf{Input:}}
-\newcommand{\algorithmicensure}{\textbf{Output:}}
-\newcommand{\sign}{\text{sign}}
-\newcommand{\argmin}{\text{argmin}}
-\newcommand{\Cut}{\text{Cut}}
-\newcommand{\Vol}{\text{Vol}}
-\newcommand{\RCut}{\text{RCut}}
-\newcommand{\NCut}{\text{NCut}}
-\newcommand{\NCC}{\text{NCC}}
-\newcommand{\RCC}{\text{RCC}}
 
-
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+}
+ 
+\urlstyle{same}
 
 \definecolor{dkyellow}{cmyk}{0, 0, 0.2, 0}
 \lstset{
@@ -123,7 +121,7 @@ Towards image-based cancer signatures from histopathology data
   
   \vspace{\stretch{2}}
    \begin{center}  \large
-\textit{Supervisor} : \textsc{T. Walter}. \\
+\textit{Supervisor} : \textsc{T. Walter and F. Reyal}. \\
 \textit{Units:} \textsc{Center for Computational Biology and UMR900}
 
    \end{center}
@@ -150,6 +148,64 @@ Towards image-based cancer signatures from histopathology data
 \newpage
 
 \section{Introduction}
+
+\subsection{Context}
+
+\subsection{PhD subject}
+
+\section{November 2015 - January 2016: MitoCheck Project}
+
+\section{January 2016 - April 2016: Camelyon2016 challenge}
+
+This Challenge is organized in conjunction with and with the support of the 2016 IEEE International Symposium on Biomedical Imaging  (ISBI-2016) and this the first challenge using whole-slide images in histopathology. This challenge fitted particularly well with my PhD time table as the data used in this challenge is very similar to the data acquired by F. Reyal. Our final ranking was not very satisfying as we did not achieve good results. This work was done with the help of V. Machairas, T. Walter and E. Decenciere. A website was made for the purpose of this challenge, \url{http://camelyon16.grand-challenge.org/home/}.
+
+\subsection{Context}
+The goal of this challenge is to evaluate new and existing algorithms for automated detection of metatases in hematoxylin and eosin (HE) stained whole-slide images of lymph node sections, see figure \ref{LymphNode} This task has a high clinical relevance but requires large amounts of reading time from pathologists. Therefore, a successful solution would hold great promise to reduce the workload of the pathologists while at the same time reduce the subjectivity in diagnosis. The Camelyon2016 challenge will focus on sentinel lymph nodes of breast cancer patients and 2 large datasets have been provided from both the Radboud University Medical Center (Nijmegen, the Netherlands), as well as the University Medical Center Utrecht (Utrecht, the Netherlands). The focus on lymph nodes of breast cancer patients is not arbitrary, lymph node metastases occur in most cancer types (e.g. breast, prostate, colon). Lymph nodes are small glands that filter lymph, the fluid that circulates through the lymphatic system. The lymph nodes in the underarm are the first place breast cancer is likely to spread. Metastatic involvement of lymph nodes is one of the most important prognostic variables in breast cancer. Prognosis is poorer when cancer has spread to the lymph nodes.
+
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.4\textwidth]{Booby.png}
+\caption{Lymph nodes}
+\label{LymphNode}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{Camelyon16.png}
+\caption{Official logo}
+\label{Ol}
+\end{figure}
+\subsection{Work pipeline}
+Some of the decisions made in this section where a necessity due to the technological difficulties caused by the type of data. In figure \ref{PipelineCam}, I expose a graphic summarising the pre-processing step to the machine learning core. The pre-processing step is not included in this graphic.
+\subsubsection*{Classification problem}
+There were two evaluations for this challenge. The first is slide based and can be seen as a binary classification, given a WSI we had to give a confidence score that this WSI contained metastases. The final score was given by the area under the curve asserted over 130 slides. The second evaluation was to asses the metastases detection within a given slide
+
+
+\subsubsection*{Pre-processing}
+This image data are Whole-slide images (WSI) and were delivered by Philips Scanner, see figure \ref{PhilipsScanner}. WSI are generally stored in a multi-resolution pyramid structure. Image files contain multiple downsampled versions of the original image. Each image in the pyramid is stored as a series of tiles, to facilitate rapid retrieval of subregions of the image, see figure \ref{Pyramid}. These compression technics are similar to those used by Google Earth and even use the same compression format, jpeg2000. 
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.8\textwidth]{PhilipsScanner.png}
+\caption{Philips Scanner, each slide is scanned and exported to a tiff format.}
+\label{PhilipsScanner}
+\end{figure}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.8\textwidth]{pyramid.png}
+\caption{Pyramid data Structure}
+\textit{Between 8 and 10 different resolutions}
+\label{Pyramid}
+\end{figure}
+Uncompressed one image can reach up to 65 GB, the WSI on the highest resolution had size 96256 x 218624 pixels and the lowest resolution had 188 x 427 pixels.
+\subsubsection*{Machine learning core}
+
+\subsubsection*{Post-processing}
+
+
+
+\section{May 2016 and future work}
+
 
 
 %\begin{figure}[!ht]
