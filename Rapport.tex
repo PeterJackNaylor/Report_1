@@ -1,6 +1,6 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
-\usepackage[francais]{babel}
+%\usepackage[english]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}    
 \usepackage{eurosym}
@@ -44,6 +44,21 @@
 
 \usepackage{algorithm2e}
 
+% marges,etc.
+\usepackage{a4wide}
+\hoffset -1cm
+\voffset -2cm
+\textheight 23cm
+\headheight 1cm
+\headsep 1cm
+\topmargin 0cm
+\textwidth 16cm
+
+%pour les couleurs
+\usepackage{color}
+\definecolor{mycolor}{rgb}{0.05,0.34,0.38}
+
+%liens dans le corps du texte
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true,
@@ -89,17 +104,26 @@
     \TypesetCoffin\tablecoffin[l,vc]%
   }
 
-
+% mise en forme des en-têtes et pieds de page
+\usepackage{fancyhdr}
+    \rhead{\markright}
+    \lfoot{\scriptsize{Peter NAYLOR - Juin, 2016}}
+    \cfoot{\thepage}
+    \rfoot{ \scriptsize{1st year PhD report}}
+    \renewcommand{\headrulewidth}{0.6pt}
+    \renewcommand{\footrulewidth}{0.5pt}
+    \makeatletter
+         \def\headrule{{\if@fancyplain\let\headrulewidth\plainheadrulewidth\fi
+              \color{mycolor}\hrule\@height\headrulewidth\@width\headwidth \vskip-\headrulewidth}}
+         \def\footrule{{\if@fancyplain\let\footrulewidth\plainfootrulewidth\fi
+              \vskip-\footruleskip\vskip-\footrulewidth
+              \color{mycolor}\color{mycolor}\hrule\@width\headwidth\@height\footrulewidth\vskip\footruleskip}}
+    \makeatother
+\pagestyle{fancy}
 
 \begin{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{titlepage}
-
-%  \begin{center} 
-%    \textsc{ENSAE ParisTech}\\
-%    ---\\
-%    AnnÃ©e 2013--2014
-%  \end{center}
   
 \begin{center}
 \includegraphics[width=0.3\textwidth]{Mines_ParisTech.png} 
@@ -110,15 +134,27 @@
 \vspace{\stretch{1}}
  
 \noindent
-\hrulefill
+\begin{center}
+\textcolor{mycolor}{\rule{16cm}{0.6pt}}\\
+\vspace{0.1cm}
+\hrule height 2pt
+\vspace{0.1cm}
+\textcolor{mycolor}{\rule{16cm}{0.6pt}}\\
+\end{center}
   \begin{center} \bfseries\Huge
 Towards image-based cancer signatures from histopathology data
   \end{center}
   \begin{center} \huge
    First year report
   \end{center}
-\hrulefill 
-  
+\begin{center}
+\textcolor{mycolor}{\rule{16cm}{0.6pt}}\\
+\vspace{0.1cm}
+\hrule height 2pt
+\vspace{0.1cm}
+\textcolor{mycolor}{\rule{16cm}{0.6pt}}\\
+\end{center}
+\vspace{1cm}
   \vspace{\stretch{2}}
    \begin{center}  \large
 \textit{Supervisor} : \textsc{T. Walter and F. Reyal}. \\
