@@ -226,22 +226,28 @@ The computational steps and design choices that had to be made can be categorize
 %%---------------------------------------
 %%---------------------------------------
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=0.4\textwidth]{Booby.png}
 \caption{Lymph nodes}
 \label{LymphNode}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=\textwidth]{Camelyon16.png}
 \caption{Official logo}
 \label{Ol}
 \end{figure}
 \subsection{Work pipeline}
-Some of the decisions made in this section where a necessity due to the technological difficulties caused by the type of data. In figure \ref{PipelineCam}, I expose a graphic summarising the pre-processing step to the machine learning core. The pre-processing step is not included in this graphic.
+Some of the decisions made in this section where a necessity due to the technological difficulties caused by the type of data. In figure \ref{PipelineCam}, I expose a graphic summarising the pre-processing step to the classification problem. The pre-processing step is not included in this graphic.
 
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{workflow.png}
+\caption{Work pipeline for the Camelyon2016 project.}
+\label{PipelineCam}
+\end{figure}
 
 
 \subsubsection*{Pre-processing}
@@ -319,13 +325,13 @@ entire data set.
   then to learn an SVM with and RBF kernel. 
 \end{enumerate}
 
-Once we have a trained classifier, this allowed us to predict on a WSI (via down-sampling) and to obtain probability maps corresponding (hopefully) to pixel based confidence map of each pixel belonging to a metastasis. Given the results on the cross-validation we choose a Random Forest model as it outperformed on F1-score metric and in accuracy. Also, the prediction probability maps on most slides were a lot less noisy than the ones acquired by the Support Vector Machine. The results and and parameter tuning are given in table \ref{cross-val}. We can also take a look at \ref{Probability map} which is the output given by our algorithm for the test WSI number 2.
+Once we have a trained classifier, this allowed us to predict on a WSI (via down-sampling) and to obtain probability maps corresponding (hopefully) to pixel based confidence map of each pixel belonging to a metastasis. Given the results on the cross-validation we choose a Random Forest model as it outperformed on F1-score metric and in accuracy. Also, the prediction probability maps on most slides were a lot less noisy than the ones acquired by the Support Vector Machine. The results and and parameter tuning are given in table \ref{Cross_val: RF}. We can also take a look at \ref{ProbabilityMapLocalMaxima} which is the output given by our algorithm for the test WSI number 2.
 
 \subsubsection*{Post-processing}
 
 Once we have the probability map of a WSI at a lower resolution we have to decide how to extract the information to better suit the two different tasks. One the one hand, for the slide base evaluation, as we choose a RF model, we could easily take the maximum value of the probability map as the confidence score of this WSI containing metastasis. On the other hand, for the lesion-based evaluation, it was difficult as we had to detect each distinct metastasis, but also not miss as little as possible. We proceeded as the following: we smoothed the image by applying a gaussian filter. The next step extracts local maxima within a connected component as to to reduce this connected region to a single data point. We can take a look at figure \ref{ProbabilityMapLocalMaxima} as an example of our metastasis location within a WSI.
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
 \centering
 \begin{subfigure}{.33\textwidth}
   \centering
@@ -383,7 +389,7 @@ The conference was held in Prague and I also attended a tutorial on deep neural 
 %\end{figure}
 
 \section*{Results}
-\begin{table}[h!]
+\begin{table}[!ht]
 \centering
 \begin{footnotesize}
 \begin{tabular}{llllrrrr}
