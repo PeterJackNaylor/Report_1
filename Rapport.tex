@@ -1,9 +1,9 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
-%\usepackage[english]{babel}
+%%\usepackage[francais]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}    
-\usepackage{eurosym}
+%\usepackage{eurosym}
 \usepackage{verbatim}      
 \usepackage{amsmath, amsthm}                             
 \usepackage{latexsym}                               
@@ -13,24 +13,24 @@
 \usepackage{listings}
 \usepackage{geometry}
 \usepackage{fancyhdr}
-\usepackage{enumitem}
+%\usepackage{enumitem}
 \usepackage{colortbl}
-\usepackage[dvipsnames]{xcolor}
+%\usepackage[dvipsnames]{xcolor}
 \usepackage{booktabs} 
-\usepackage{moreverb}
+%\usepackage{moreverb}
 
 \DeclareMathAlphabet{\mathonebb}{U}{bbold}{m}{n}
 \newcommand{\one}{\ensuremath{\mathonebb{1}}}
 
 \usepackage{color}
-\usepackage{multirow}
+%\usepackage{multirow}
 %\usepackage{float}
 \definecolor{gris25}{gray}{0.75}
 \usepackage{colortbl}
 \usepackage{fancyhdr}
 \usepackage{amsmath,amsfonts,amssymb}
-\usepackage{titlesec}
-\usepackage{supertabular}
+%\usepackage{titlesec}
+%\usepackage{supertabular}
 \usepackage{longtable}
 
 \usepackage{caption}
@@ -42,23 +42,8 @@
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
-\usepackage{algorithm2e}
+%\usepackage{algorithm2e}
 
-% marges,etc.
-\usepackage{a4wide}
-\hoffset -1cm
-\voffset -2cm
-\textheight 23cm
-\headheight 1cm
-\headsep 1cm
-\topmargin 0cm
-\textwidth 16cm
-
-%pour les couleurs
-\usepackage{color}
-\definecolor{mycolor}{rgb}{0.05,0.34,0.38}
-
-%liens dans le corps du texte
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true,
@@ -104,26 +89,17 @@
     \TypesetCoffin\tablecoffin[l,vc]%
   }
 
-% mise en forme des en-têtes et pieds de page
-\usepackage{fancyhdr}
-    \rhead{\markright}
-    \lfoot{\scriptsize{Peter NAYLOR - Juin, 2016}}
-    \cfoot{\thepage}
-    \rfoot{ \scriptsize{1st year PhD report}}
-    \renewcommand{\headrulewidth}{0.6pt}
-    \renewcommand{\footrulewidth}{0.5pt}
-    \makeatletter
-         \def\headrule{{\if@fancyplain\let\headrulewidth\plainheadrulewidth\fi
-              \color{mycolor}\hrule\@height\headrulewidth\@width\headwidth \vskip-\headrulewidth}}
-         \def\footrule{{\if@fancyplain\let\footrulewidth\plainfootrulewidth\fi
-              \vskip-\footruleskip\vskip-\footrulewidth
-              \color{mycolor}\color{mycolor}\hrule\@width\headwidth\@height\footrulewidth\vskip\footruleskip}}
-    \makeatother
-\pagestyle{fancy}
+
 
 \begin{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{titlepage}
+
+%  \begin{center} 
+%    \textsc{ENSAE ParisTech}\\
+%    ---\\
+%    AnnÃ©e 2013--2014
+%  \end{center}
   
 \begin{center}
 \includegraphics[width=0.3\textwidth]{Mines_ParisTech.png} 
@@ -134,27 +110,15 @@
 \vspace{\stretch{1}}
  
 \noindent
-\begin{center}
-\textcolor{mycolor}{\rule{16cm}{0.6pt}}\\
-\vspace{0.1cm}
-\hrule height 2pt
-\vspace{0.1cm}
-\textcolor{mycolor}{\rule{16cm}{0.6pt}}\\
-\end{center}
+\hrulefill
   \begin{center} \bfseries\Huge
 Towards image-based cancer signatures from histopathology data
   \end{center}
   \begin{center} \huge
    First year report
   \end{center}
-\begin{center}
-\textcolor{mycolor}{\rule{16cm}{0.6pt}}\\
-\vspace{0.1cm}
-\hrule height 2pt
-\vspace{0.1cm}
-\textcolor{mycolor}{\rule{16cm}{0.6pt}}\\
-\end{center}
-\vspace{1cm}
+\hrulefill 
+  
   \vspace{\stretch{2}}
    \begin{center}  \large
 \textit{Supervisor} : \textsc{T. Walter and F. Reyal}. \\
@@ -197,7 +161,37 @@ This Challenge is organized in conjunction with and with the support of the 2016
 
 \subsection{Context}
 The goal of this challenge is to evaluate new and existing algorithms for automated detection of metatases in hematoxylin and eosin (HE) stained whole-slide images of lymph node sections, see figure \ref{LymphNode} This task has a high clinical relevance but requires large amounts of reading time from pathologists. Therefore, a successful solution would hold great promise to reduce the workload of the pathologists while at the same time reduce the subjectivity in diagnosis. The Camelyon2016 challenge will focus on sentinel lymph nodes of breast cancer patients and 2 large datasets have been provided from both the Radboud University Medical Center (Nijmegen, the Netherlands), as well as the University Medical Center Utrecht (Utrecht, the Netherlands). The focus on lymph nodes of breast cancer patients is not arbitrary, lymph node metastases occur in most cancer types (e.g. breast, prostate, colon). Lymph nodes are small glands that filter lymph, the fluid that circulates through the lymphatic system. The lymph nodes in the underarm are the first place breast cancer is likely to spread. Metastatic involvement of lymph nodes is one of the most important prognostic variables in breast cancer. Prognosis is poorer when cancer has spread to the lymph nodes.
+\subsubsection*{Data}
+The data in this challenge contains a total of 400 whole-slide images (WSIs) of sentinel lymph node from two independent datasets collected in Radboud University Medical Center (Nijmegen, the Netherlands), and the University Medical Center Utrecht (Utrecht, the Netherlands). The training dataset consists of 270 WSIs of lymph node (160 Normal and 110 containing metastases). WSI are generally stored in a multi-resolution pyramid structure. WSI contain multiple downsampled versions of the original image. Each image in the pyramid is stored as a series of tiles, this file structure is to facilitate rapid retrieval of subregions of the image as one could not even open one at the highest resolution, see figure \ref{fig: Pyramid}. These compression technics are similar to those used by Google Earth and even use the same compression format, jpeg2000. If uncompressed, the original image is roughly 65 GB and is an image of size 100 000 x 200 000 pixels.
 
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.8\textwidth]{pyramid.png}
+\caption{Pyramid data Structure}
+\textit{Between 8 and 10 different resolutions}
+\label{fig: Pyramid}
+\end{figure}
+Uncompressed one image can reach up to 65 GB, the WSI on the highest resolution had size 96256 x 218624 pixels and the lowest resolution had 188 x 427 pixels.
+
+
+\subsection{Classification problem}
+There were two evaluations and therefore two distinct scoreboards for this challenge. The first is slide based and can be seen as a binary classification, given a Whole-slide Images (WSI) we had to give a confidence score that this WSI contained metastases. The final score for this evaluation was given by the area under the curve (or ROC curve) asserted over 130 test slides. The second was a lesion-based evaluation, this evaluation was aimed to asses the metastases detection within a given slide. This within slide evaluation was measured vi a free-response receiver operating characteristic (FROC). This is similar to ROC analysis, except that the false positive rate on the x-axis is replaced by the average number of false positives per image. For this challenge, our detection will be considered a true positive, if the location of the detected region is within the annotated ground truth lesion. The FROC curve is defined as the plot of sensitivity versus the average number of false-positives per image. 
+
+Due to limited time, we tackled these two evaluations as a pixel classification in supervised setting. Each pixel is described by a vector of features $x \in \mathbb{R}^P$. The training set is composed of a set of such vectors $x^T$,combined in the data matrix $X \in \mathbb{R}^{N \times P}$ and the corresponding labels $Y \in \{0,1\}^N$, provided by the challenge annotators. 
+%The concatenation of all vectors is denoted by $X \in
+The computational steps and design choices that had to be made can be categorized as follows: 
+\begin{enumerate}
+	\item Pre-processing of the stained whole-slide images.
+	% Feature  extraction. Here, we used a pannel of color and texture
+    %     descriptors, evaluated on superpixel regions.
+	%\item Sampling strategies in order to derive a reasonably
+    %      sized training data set. 
+         \item Classification method: here we tested and adapted
+           Random Forests and Support Vector Machines. 
+         \item Post-processing of the probability map.
+\end{enumerate}
+%%---------------------------------------
+%%---------------------------------------
 
 \begin{figure}[!ht]
 \centering
@@ -214,30 +208,89 @@ The goal of this challenge is to evaluate new and existing algorithms for automa
 \end{figure}
 \subsection{Work pipeline}
 Some of the decisions made in this section where a necessity due to the technological difficulties caused by the type of data. In figure \ref{PipelineCam}, I expose a graphic summarising the pre-processing step to the machine learning core. The pre-processing step is not included in this graphic.
-\subsubsection*{Classification problem}
-There were two evaluations for this challenge. The first is slide based and can be seen as a binary classification, given a WSI we had to give a confidence score that this WSI contained metastases. The final score was given by the area under the curve asserted over 130 slides. The second evaluation was to asses the metastases detection within a given slide
+
 
 
 \subsubsection*{Pre-processing}
-This image data are Whole-slide images (WSI) and were delivered by Philips Scanner, see figure \ref{PhilipsScanner}. WSI are generally stored in a multi-resolution pyramid structure. Image files contain multiple downsampled versions of the original image. Each image in the pyramid is stored as a series of tiles, to facilitate rapid retrieval of subregions of the image, see figure \ref{Pyramid}. These compression technics are similar to those used by Google Earth and even use the same compression format, jpeg2000. 
-\begin{figure}[!ht]
-\centering
-\includegraphics[width=0.8\textwidth]{PhilipsScanner.png}
-\caption{Philips Scanner, each slide is scanned and exported to a tiff format.}
-\label{PhilipsScanner}
-\end{figure}
-\begin{figure}[!ht]
-\centering
-\includegraphics[width=0.8\textwidth]{pyramid.png}
-\caption{Pyramid data Structure}
-\textit{Between 8 and 10 different resolutions}
-\label{Pyramid}
-\end{figure}
-Uncompressed one image can reach up to 65 GB, the WSI on the highest resolution had size 96256 x 218624 pixels and the lowest resolution had 188 x 427 pixels.
-\subsubsection*{Machine learning core}
+
+In order to access relevant information in such a tiff file, we had to think careful as how to segment the whole image to have relevant patches, these patches were a necessity to process the information contained in the slide (Memory constraints). As a WSI is mostly composed of white, processing only the patches contain tissue were restrained. The method used relied on a threshold segmentation of the WSI at a low resolution in order to cover the whole image. Once the tissue areas were found, we extracted small patches at a very high resolution (resolution number 2) randomly from the WSI. 300 to 400 images of size 1000 x 1000 were extracted on average per WSI. We then applied color deconvolution \cite{deconvolution} to the smaller images in order to obtain a physicologically relevant representation
+of the color information.  This was done in order to reduce the
+computational burden for the subsequent steps.
+%A set of 100 \textit{Superpixel-Adaptive Features} (SAF) were used to
+%describe each pixel of the train and test image databases. As
+%presented in \cite{saf}, these features are well suited for
+%segmentation purposes as they are computed on superpixels, i.e. on a
+%\textit{computational support} which adapts to the image
+%content. 
+%Here, we used \textit{waterpixels} \cite{waterpixels}, as they feature
+%good adherence to real object boundaries and they are very fast to
+%compute. In particular, this allowed us to calculate several
+%superpixel partitions, therefore capturing information at different
+%scales. 
+
+On each image, we calculated a large panel of different features describing color
+and texture of the images. For this, different operators were applied
+on the images: identity; a set of operators from Mathematical
+Morphology: erosion, opening, top hat and morphological gradient (different
+sizes of structuring elements with V6 neighborhood); Haralick texture
+features (averaged on all directions); and a family of features based
+on Gaussians: difference of gaussians (faster approximation of the
+laplacian), eigenvalues of the structure tensor, eigenvalues of
+hessian of gaussian. 
+
+We evaluated these features on superpixel regions: we first calculated
+a partition of the image into superpixels. Here, we used
+\textit{waterpixels} \cite{waterpixels}, as they feature good
+adherence to real object boundaries and they are very fast to
+compute.  In particular, this allowed us to calculate several
+superpixel partitions with different size parameters, therefore capturing
+information at different scales. The features were then evaluated on
+the superpixel regions (average values) at the different
+scales. Altogether, we obtained 100 features for each pixel in this step. 
+
+%The partition into waterpixels (with a given set of parameters values)
+%was computed once and each pixel was assigned
+%the average pixel value within the superpixel it belonged to. 
+%
+%In order to
+%capture multiscale information, we repeated the process with
+%waterpixels of different sizes ($step \in \left[ 15,20, 30\right]
+%pixels$).\\ 
+%
+%%---------------------------------------
+%%---------------------------------------
+\subsubsection*{Classification model}
+%%---------------------------------------
+%%---------------------------------------
+We investigated two classification methods: Random Forests and Support
+Vector Machines with RBF kernels. The particularity of the
+classification task was an extremely large number of samples ($N \sim  10^{10}$).
+Consequently, we could not simply apply the learning algorithms on the
+entire data set.  
+\begin{enumerate}
+\item {\it Random Forests (RF):} Having access to a very large number of
+  samples allows us to modify the standard RF procedure. Random
+  forests work best, if the individual trees are different from each
+  other and cover ``different aspects'' of the data. This is normally
+  achieved by boosting, and by randomly drawing the features to be
+  considered. With the amount of annotated data we have here, we can
+  afford presenting different data to each tree. We therefore generate
+  different (but stratified) training sets for each tree of the Random
+  Forest.  
+\item {\it Support Vector Machines (SVM):} Training with large number
+  of samples is generally problematic for non-liner SVM. We therefore
+  downsampled the data presented to the classifier. In order to
+  properly sample the feature space, we designed a hierarchical
+  strategy, where we first apply k-means to each slide, and keep only
+  a few representing data points for each cluster. This allowed us
+  then to learn an SVM with and RBF kernel. 
+\end{enumerate}
+
+Once we have a trained classifier, this allowed us to predict on a WSI (via down-sampling) and to obtain probability maps corresponding (hopefully) to pixel based confidence map of each pixel belonging to a metastasis. Given the results on the cross-validation we choose a Random Forest model as it outperformed on F1-score metric and in accuracy. Also, the prediction probability maps on most slides were a lot less noisy than the ones acquired by the Support Vector Machine. The results and and parameter tuning are given in table \ref{cross-val}.
 
 \subsubsection*{Post-processing}
 
+Once we have the probability map of a WSI at a lower resolution we have to decide how to extract the information to better suit the two different tasks. One the one hand, for the slide base evaluation, as we choose a RF model, we could easily take the maximum value of the probability map as the confidence score of this WSI containing metastasis. On the other hand, for the lesion-based evaluation, it was difficult as we had to detect each distinct metastasis, but also not miss as little as possible. We proceeded as the following: we smoothed the image by applying a gaussian filter
 
 
 \section{May 2016 and future work}
@@ -258,8 +311,32 @@ Uncompressed one image can reach up to 65 GB, the WSI on the highest resolution 
 
 \bibitem{OriginalPaper} Thomas Bühler and Matthias Hein from Saarland University, Germany, \textit{Spectral Clustering based on the graph $p$-Laplacian}. ICML 2009.
 
+\bibitem{deconvolution}
+Quantification of histochemical staining by color deconvolution
+Ruifrok, A C and Johnston, D A
+In: Analytical and quantitative cytology and histology, 2001, 23(4), pp.291--299\\
+
+\bibitem{waterpixels}
+Waterpixels.
+Machairas, V., Faessel, M., C\'ardenas-Pe\~na, D., Chabardes, T., Walter, T., Decenci\`ere, E..
+In: IEEE Transactions on Image Processing, Institute of Electrical and Electronics Engineers, 2015, 24 (11), pp.3707-3716.\\
+
+\bibitem{saf}
+New General Features Based on Superpixels for Image Segmentation Learning.
+Machairas, V.,T. Baldeweck T., Walter, T., Decenci\`ere, E..
+In: International Symposium on Biomedical Imaging, Apr. 2016, Prague, Czech Republic.\\
+
+\bibitem{breiman}
+Random Forests.
+Breiman, L..
+In: Machine Learning, vol. 45, no. 1, pp. 5-32, Oct. 2001.
+
 \end{thebibliography}
 
 
 
 \end{document}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
