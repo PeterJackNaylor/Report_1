@@ -56,7 +56,7 @@
 
 %pour les couleurs
 \usepackage{color}
-\definecolor{mycolor}{rgb}{0.7,0.1,0.7}
+\definecolor{mycolor}{rgb}{0.06,0.32,0.39}
 
 %liens dans le corps du texte
 \usepackage{hyperref}
@@ -143,14 +143,26 @@
 \vspace{\stretch{1}}
  
 \noindent
-\hrulefill
+\begin{center}
+\textcolor{mycolor}{\rule{16cm}{0.6pt}}\\
+\vspace{0.1cm}
+\hrule height 2pt
+\vspace{0.1cm}
+\textcolor{mycolor}{\rule{16cm}{0.6pt}}\\
+\end{center}
   \begin{center} \bfseries\Huge
 Towards image-based cancer signatures from histopathology data
   \end{center}
   \begin{center} \huge
    First year report
   \end{center}
-\hrulefill 
+\begin{center}
+\textcolor{mycolor}{\rule{16cm}{0.6pt}}\\
+\vspace{0.1cm}
+\hrule height 2pt
+\vspace{0.1cm}
+\textcolor{mycolor}{\rule{16cm}{0.6pt}}\\
+\end{center}
   
   \vspace{\stretch{2}}
    \begin{center}  \large
@@ -194,13 +206,21 @@ This Challenge is organized in conjunction with and with the support of the 2016
 
 \subsection{Context}
 The goal of this challenge is to evaluate new and existing algorithms for automated detection of metatases in hematoxylin and eosin (HE) stained whole-slide images of lymph node sections, see figure \ref{LymphNode} This task has a high clinical relevance but requires large amounts of reading time from pathologists. Therefore, a successful solution would hold great promise to reduce the workload of the pathologists while at the same time reduce the subjectivity in diagnosis. The Camelyon2016 challenge will focus on sentinel lymph nodes of breast cancer patients and 2 large datasets have been provided from both the Radboud University Medical Center (Nijmegen, the Netherlands), as well as the University Medical Center Utrecht (Utrecht, the Netherlands). The focus on lymph nodes of breast cancer patients is not arbitrary, lymph node metastases occur in most cancer types (e.g. breast, prostate, colon). Lymph nodes are small glands that filter lymph, the fluid that circulates through the lymphatic system. The lymph nodes in the underarm are the first place breast cancer is likely to spread. Metastatic involvement of lymph nodes is one of the most important prognostic variables in breast cancer. Prognosis is poorer when cancer has spread to the lymph nodes.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.3\textwidth]{Booby.png}
+\caption{Lymph nodes}
+\label{LymphNode}
+\end{figure}
+
 \subsubsection*{Data}
 The data in this challenge contains a total of 400 whole-slide images (WSIs) of sentinel lymph node from two independent datasets collected in Radboud University Medical Center (Nijmegen, the Netherlands), and the University Medical Center Utrecht (Utrecht, the Netherlands). The training dataset consists of 270 WSIs of lymph node (160 Normal and 110 containing metastases). WSI are generally stored in a multi-resolution pyramid structure. WSI contain multiple downsampled versions of the original image. Each image in the pyramid is stored as a series of tiles, this file structure is to facilitate rapid retrieval of subregions of the image as one could not even open one at the highest resolution, see figure \ref{fig: Pyramid}. These compression technics are similar to those used by Google Earth and even use the same compression format, jpeg2000. Uncompressed, one image can reach up to 65 GB, the WSI have , at the highest resolution, a size of 96256 x 218624 pixels and have only 188 x 427 pixels at the lowest resolution.
 
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=0.6\textwidth]{pyramid.png}
+\includegraphics[width=0.5\textwidth]{pyramid.png}
 \caption{Pyramid data Structure}
 \textit{Between 8 and 10 different resolutions}
 \label{fig: Pyramid}
@@ -226,19 +246,12 @@ The computational steps and design choices that had to be made can be categorize
 %%---------------------------------------
 %%---------------------------------------
 
-\begin{figure}[!ht]
-\centering
-\includegraphics[width=0.4\textwidth]{Booby.png}
-\caption{Lymph nodes}
-\label{LymphNode}
-\end{figure}
-
-\begin{figure}[!ht]
-\centering
-\includegraphics[width=\textwidth]{Camelyon16.png}
-\caption{Official logo}
-\label{Ol}
-\end{figure}
+%\begin{figure}[!ht]
+%\centering
+%\includegraphics[width=\textwidth]{Camelyon16.png}
+%\caption{Official logo}
+%\label{Ol}
+%\end{figure}
 \subsection{Work pipeline}
 Some of the decisions made in this section where a necessity due to the technological difficulties caused by the type of data. In figure \ref{PipelineCam}, I expose a graphic summarising the pre-processing step to the classification problem. The pre-processing step is not included in this graphic.
 
@@ -272,10 +285,10 @@ and texture of the images. For this, different operators were applied
 on the images: identity; a set of operators from Mathematical
 Morphology: erosion, opening, top hat and morphological gradient (different
 sizes of structuring elements with V6 neighborhood); Haralick texture
-features (averaged on all directions); and a family of features based
+features (averaged on all directions). We also applied a family of features based
 on Gaussians: difference of gaussians (faster approximation of the
 laplacian), eigenvalues of the structure tensor, eigenvalues of
-hessian of gaussian. 
+hessian of gaussian based, this family of features are the same set found in the software Ilastik, see \cite{Ilastik}.
 
 We evaluated these features on superpixel regions: we first calculated
 a partition of the image into superpixels. Here, we used
@@ -329,7 +342,7 @@ Once we have a trained classifier, this allowed us to predict on a WSI (via down
 
 \subsubsection*{Post-processing}
 
-Once we have the probability map of a WSI at a lower resolution we have to decide how to extract the information to better suit the two different tasks. One the one hand, for the slide base evaluation, as we choose a RF model, we could easily take the maximum value of the probability map as the confidence score of this WSI containing metastasis. On the other hand, for the lesion-based evaluation, it was difficult as we had to detect each distinct metastasis, but also not miss as little as possible. We proceeded as the following: we smoothed the image by applying a gaussian filter. The next step extracts local maxima within a connected component as to to reduce this connected region to a single data point. We can take a look at figure \ref{ProbabilityMapLocalMaxima} as an example of our metastasis location within a WSI.
+Once we have the probability map of a WSI at a lower resolution we have to decide how to extract the information to better suit the two different tasks. One the one hand, for the slide base evaluation, as we choose a RF model, we could easily take the maximum value of the probability map as the confidence score of this WSI containing metastasis. On the other hand, for the lesion-based evaluation, it was difficult as we had to detect each distinct metastasis, but also not miss as little as possible. We proceeded as the following: we smoothed the image by applying a gaussian filter. The next step extracts local maxima within a connected component as to to reduce this connected region to a single data point. We can take a look at figure \ref{Detecting maxima} as an example of our metastasis location within a WSI.
 
 \begin{figure}[!ht]
 \centering
@@ -365,7 +378,7 @@ This challenge was very rewarding as the he taught me a huge amount about cluste
 
 \subsection{Challenge Results and ISBI 2016}
 
-As I participated to this challenge it was interesting for me to be present to the presentations concerning it. We made 22 out of 23 on the first leader board and our ROC curve is displayed in figure \ref{Eval: ROC}. We reached 0.63\% of area under the curve. We ended last in the second score board as our post-processing phase was not reducing enough the amount of detected metastasis. To better explain this aspect, let's have a closer look at figure \ref{Detecting maxima}, on the lower part of the tumor we have two red point indicating that we have detected a metastasis with high confidence in that region. However their is two points, if we are mistaken this will lead to two false positives. It is also interesting to note that only 3 teams used classical methods to extract information from the WSI. The best of these three teams reached an area under the ROC curve of 0.76\% and finished 11. The 3rd team performing classical methods was last. After a brief discussion with the best performing team within classical extraction method, we hope that our method could reach 0.76\% with a better tuning. (With respect to the feature, model parameters and model evaluation). However, all the other teams used Convolutionnal Neural Networks and achieved much better result than classical methods. This gave us clear view of my next study, deep neural networks.
+As I participated to this challenge it was interesting for me to be present to the presentations concerning it. We made 22 out of 23 on the first leader board and our ROC curve is displayed in figure \ref{Eval: ROC}. We reached 0.63\% of area under the curve. We ended last in the second score board as our post-processing phase was not reducing enough the amount of detected metastasis. To better explain this aspect, let's have a closer look at figure \ref{Detecting maxima}, on the lower part of the tumor we have two red point indicating that we have detected a metastasis with high confidence in that region. However their is two points, if we are mistaken this will lead to two false positives. It is also interesting to note that only 3 teams used classical methods to extract information from the WSI. The best of these three teams reached an area under the ROC curve of 0.76\% and finished 11. The 3rd team performing classical methods was last. After a brief discussion with the best performing team within classical extraction method, we hope that our method could reach 0.76\% with a better tuning, with respect to the feature, model parameters and model evaluation. However, all the other teams used Convolutionnal Neural Networks and achieved much better result than classical methods. This gave us clear view of my next study, deep neural networks.
 
 \begin{figure}[!ht]
 \centering
@@ -461,31 +474,11 @@ The conference was held in Prague and I also attended a tutorial on deep neural 
 \end{table}
 \newpage
 
-\begin{thebibliography}{9}
+\bibliographystyle{unsrt} %% ou autre style
 
-\bibitem{OriginalPaper} Thomas Bühler and Matthias Hein from Saarland University, Germany, \textit{Spectral Clustering based on the graph $p$-Laplacian}. ICML 2009.
+\bibliography{biblio.bib}
 
-\bibitem{deconvolution}
-Quantification of histochemical staining by color deconvolution
-Ruifrok, A C and Johnston, D A
-In: Analytical and quantitative cytology and histology, 2001, 23(4), pp.291--299\\
 
-\bibitem{waterpixels}
-Waterpixels.
-Machairas, V., Faessel, M., C\'ardenas-Pe\~na, D., Chabardes, T., Walter, T., Decenci\`ere, E..
-In: IEEE Transactions on Image Processing, Institute of Electrical and Electronics Engineers, 2015, 24 (11), pp.3707-3716.\\
-
-\bibitem{saf}
-New General Features Based on Superpixels for Image Segmentation Learning.
-Machairas, V.,T. Baldeweck T., Walter, T., Decenci\`ere, E..
-In: International Symposium on Biomedical Imaging, Apr. 2016, Prague, Czech Republic.\\
-
-\bibitem{breiman}
-Random Forests.
-Breiman, L..
-In: Machine Learning, vol. 45, no. 1, pp. 5-32, Oct. 2001.
-
-\end{thebibliography}
 
 
 
