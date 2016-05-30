@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[a4paper,10pt]{article}
 \usepackage[utf8]{inputenc}
 %\usepackage[francais]{babel}
 \usepackage[T1]{fontenc}
@@ -19,6 +19,7 @@
 \usepackage{booktabs}
 %\usepackage{moreverb}
 
+\usepackage{cite}
 \DeclareMathAlphabet{\mathonebb}{U}{bbold}{m}{n}
 \newcommand{\one}{\ensuremath{\mathonebb{1}}}
 
@@ -107,7 +108,7 @@
 % mise en forme des en-têtes et pieds de page
 \usepackage{fancyhdr}
     \rhead{\markright}
-    \lfoot{\scriptsize{Peter NAYLOR - Juin, 2016}}
+    \lfoot{\scriptsize{Peter NAYLOR - June, 2016}}
     \cfoot{\thepage}
     \rfoot{ \scriptsize{1st year PhD report}}
     \renewcommand{\headrulewidth}{0.6pt}
@@ -194,11 +195,26 @@ Towards image-based cancer signatures from histopathology data
 
 \section{Introduction}
 
-\subsection{Context}
+I have personally always been very interested in new technologies and without thinking I ended up wanting to study computer vision. As my other interests concern machine learning I was naturally driven to start a PhD in computer vision and machine learning. An important and emerging field in these two subjects deals with cancer related topics and in particular histopathology. Cancer diagnosis involves complex interpretation of a multitude of heterogeneous data, such as genomic, transcriptomic and image data. The image data used in this context corresponds to thin slices of the tumor and of the surrounding tissue, stained with agents in order to highlight specific structures, such as cell nuclei or collagen. The image data is what we call histopathology data.
+A medical practitioner will routinely check the patients histopathology image data in order to decide the next step in the patient's treatment. Histopathology slides can thus be very informative of the cancer subtype and/or of how the patient's immune system is reacting to the cancer. Adding relevant information extracted from histopathology slides will help making better prognosis for cancer treatment and in particular, help better understand cancer process. 
 
-\subsection{PhD subject}
+ We wish to discover appropriate tools to quantify the huge amount of data found in histopathology slides. On the long run, such a quantification scheme would fit in a work pipeline that would investigate the most informative physiological features and the links to genomic and transcriptomic features. We could also image such a quantification scheme of histopathological data could also have links to different medical imaging, such as 3D MRI scans of the area infected.
+ 
+ I will give a chronological assessment of my work starting by January, even though I officially started my PhD in November, I took two extra months to finish my master's project that is now currently in hold. This master project was also in the field of machine learning and computer vision, however it was not applied to histopathology data but to live imaging of fluorescent microscopic data. 
 
-\section{November 2015 - January 2016: MitoCheck Project}
+
+\subsection*{PhD subject}
+
+This  PhD  project is a first step in integrating morphological and phenotypic information at the cellular and tissular scale into a bioinformatics workflow. We wish to be able to apply these two datasets, for the moment I have only worked on one of these data sets. This data is unpublished and will focus on breast cancer, a special type of very aggressive cancer. In the application, we hope identifying links between cellular phenotypes, transcriptomic and grading data that will feed future projects in this field with interesting hypotheses. 
+
+\subsection*{Context}
+
+Different contexts can arise when dealing with computer vision, in particular with the very recent trends that we have had in these last years. Recent advances in deep neural network, and in particular in their optimization have made them become the state-of-the-art model for computer vision. Convolutional neural networks were the first neural network in computer vision and succeed in becoming a benchmark for the MNIST data set \cite{lecun}, also very recently many others types of neural networks have become top of their respective field, we can think of the pascal voc challenge with \cite{ImageNet}. Deep neural networks have become the trend in many areas in machine learning in the field of computer vision we can think of segmentation problems where deep networks have won most of the challenges this year in ISBI, in particular \cite{FCN} and \cite{UNet}. We can think of their great popularity by becoming the best "Artificial Intelligence" in Go, see \cite{AlphaGo}. It seems unavoidable that I will try and test deep neural networks to help with my project. The first part of this report is a project that try dealing with the computer vision aspect via classical methods. Such as manually creating features in order to recognize such and such aspect on the histopatholigical images.
+
+On a different aspect, mixting heteregenous data, such as we have here can be very complicated. Many have used image data to "de-noise" molecular based data. Others have used it ...
+
+I started my PhD by focusing on a ISBI2016 challenge, this challenge was a very interesting topic as it is very close to my PhD project. This challenge dealt with histopathological images acquired from breast tissue with a Philips scanner, the raw data was under a tiff format which is a special image format designed for histopathological data. Participating in this challenge enable me to have a first experience with histopathology data, becoming familiar with classical computer vision approaches and finally allowed me to use and get familiar with strong computational resources, with the use of a computer cluster. However, this challenge did not involve any crossing between heterogeneous types of data such as those describe in the earlier paragraphs.
+%\section{November 2015 - January 2016: MitoCheck Project}
 
 \section{January 2016 - April 2016: Camelyon2016 challenge}
 
@@ -391,7 +407,24 @@ The conference was held in Prague and I also attended a tutorial on deep neural 
 
 
 \section{May 2016 and future work}
+From May to until now my main focus has returned to the datasets provided by the collaborations involved in this PhD. In particular I had to acquire the data set from F. Reyal.
 
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{Workflow.png}
+\caption{Workflow}
+\label{workflow1}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{ComputerVision.png}
+\caption{Computer Vision aspect}
+\label{ComputerVision}
+\end{figure}
+
+
+\subsection{New methods}
 
 
 %\begin{figure}[!ht]
@@ -474,11 +507,8 @@ The conference was held in Prague and I also attended a tutorial on deep neural 
 \end{table}
 \newpage
 
-\bibliographystyle{unsrt} %% ou autre style
-
+\bibliographystyle{unsrt}%Used BibTeX style is unsrt
 \bibliography{biblio.bib}
-
-
 
 
 
