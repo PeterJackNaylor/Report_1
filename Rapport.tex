@@ -43,6 +43,10 @@
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
+
+\usepackage{natbib}
+
+
 %\usepackage{algorithm2e}
 
 % marges,etc.
@@ -64,7 +68,8 @@
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
-    filecolor=magenta,
+    citecolor=dkgreen,
+    filecolor=blue,
     urlcolor=blue,
 }
 
@@ -213,7 +218,8 @@ Different contexts can arise when dealing with computer vision, in particular wi
 %"Artificial Intelligence" in Go
 , see \cite{AlphaGo}. It seems unavoidable that I need to try and test deep neural networks, mainly for the segmentation of histopathology slides. The first part of this report, I tried applying classical methods with respect to the computer vision aspect. Such as manually creating features in order to recognize such and such aspect on the histopatholigical images.
 
-On a different aspect, mixting heteregenous data, such as we have here can be very complicated. Many have used image data to "de-noise" molecular based data. Others have used it ...
+On a different aspect, mixting heteregenous data, such as we have here can be very complicated. Many have used image data to correct molecular based data, such as \citet{yuan2012quantitative}. In \cite{yuan2012quantitative}, they used image data to represent in a quantitative way the heterogeneous cell populations in order to use the heterogeneity in the analysis to correct molecular profiles. Evaluating tumor heterogenity is an important aspect, in \cite{potts2012evaluating} they quantify cell heterogeneity in two ways, intratumoral, linked to variability among cells within a tumor, and intertumoral which is linked to tumor heterogeneity within the the whole tissue. In \cite{potts2012evaluating} paper they increase the accuracy of HER2 scoring by adding image features based on spatial distribution and local neighbourhoods. In \cite{petushi2006large}, they show that we can extract relevant data from the images in order to create reproducible grading, reproducibility of the grading assigned by pathologists is a constant issue as it can highly variable from one pathologist to another, and even from one hospital to another. 										
+
 
 I started my PhD by focusing on a ISBI2016 challenge, this challenge was a very interesting topic as it is very similar to my PhD project. This challenge dealt with histopathological images acquired from breast tissue with a Philips scanner, the raw data was under a tiff format which is a special image format used for histopathological data. Participating in this challenge enabled me to have a first experience with histopathology data, becoming familiar with classical computer vision approaches and finally allowed me to use strong computational resources,via a cluster if computers. However, this challenge did not involve any crossing between heterogeneous types of data such as those describe in the earlier paragraphs.
 %\section{November 2015 - January 2016: MitoCheck Project}
@@ -405,11 +411,11 @@ As I participated to this challenge it was interesting for me to attend the pres
 \label{Eval: ROC}
 \end{figure}
 
-The conference was held in Prague, I also attended a tutorial on deep neural networks that was given at the end. It lasted 4 days and to the surprise of some, histopathology has gained in popularity as you could easily end up listening to only histopathology talks. In most histopathology talks, neural network, the state of the art in image processing were used and it seems, as I focus on applicationd, that it is essential for me to try and to apply deep convolutionnal network to my projects.
+The conference was held in Prague, I also attended a tutorial on deep neural networks that was given at the end. It lasted 4 days and to the surprise of some, histopathology has gained in popularity as you could easily end up listening to only histopathology talks. In most histopathology talks, neural network, the state of the art in image processing were used and it seems, as I focus on application, it is essential for me to try and to apply deep convolutionnal network.
 
 
 \section{May 2016 and future work}
-From May to until now my main focus has returned to the datasets provided by the collaborations involved in this PhD. In particular I had to acquire the data set from F. Reyal.
+From May to until now, my main focus has returned to the datasets provided by the collaborations involved in this PhD. In particular I had to acquire the data set from F. Reyal. The work pipeline for this project is pictured in \ref{workflow1}. The pipeline can be divided in three parts: computer vision in order to extract relevant biological data, feature extraction on two levels, the biological image data driven features and the extraction of the other data type. This data type can be molecular driven, transcriptomic, another type of image data. The final part of this project will then be to derive a statistical model in order to find correlations between the different types of data, improve prognosis prediction and overall try to better quantify and understand cancer progression.
 
 \begin{figure}[!ht]
 \centering
@@ -418,17 +424,23 @@ From May to until now my main focus has returned to the datasets provided by the
 \label{workflow1}
 \end{figure}
 
+
+\subsection{Data}
+
+The tissue samples were extracted from the patients in two steps, first was performed a biopsy extraction as it is picture in \ref{workflow1}, a biopsy sample is a thin piece of tissue that can be performed without a full surgery. A biopsy will inform the practitioner if he must perform surgery to remove the tumor, or just do a chemotherapy based treatment. After the biopsy extraction, a chemotherapy based treatment was applied to all the patients. After a period of time, the surgeons extracted whole tumor slides from the patients. Having this data scheme could allow us to quantify patients response to chemotherapy.
+
+\subsection{Computer vision}
+
+The scheme for this part can be seen in \ref{ComputerVision}, this scheme is similar in the first steps to those performed in the camelyon challenge 2016. In this first steps, we wish to find regions of interest, which can be resumed to finding the tissue areas in the WSI. The data here was a lot more messier, same annotation were performed via a marker on several slides and had to be removed. The slide label was also in most of the WSI and had to be removed via a pixel value segmentation. Once the tissue information was discovered in the WSI we extracted small patches of size 512 x 512.
+
+We wish to create biological features with the help of the pathologist. Similar to the work done in \cite{yuan2012quantitative}, we wish to have revelant features. In \citep{yuan2012quantitative} they have features involving the number of Lymphocytes counts, number of stromal, cancer cells, WSI density profiles, mitotic density counts and so on. However in order to create this biological driven features we have to properly segment the histopathology data. Due to the recent advances in deep neural networks and lately for their performances in segmentation for medical imaging, see \cite{UNet}
+
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=\textwidth]{ComputerVision.png}
 \caption{Computer Vision aspect}
 \label{ComputerVision}
 \end{figure}
-
-
-\subsection{New methods}
-
-
 %\begin{figure}[!ht]
 %\centering
 %\includegraphics[width=\textwidth]{}
@@ -509,8 +521,9 @@ From May to until now my main focus has returned to the datasets provided by the
 \end{table}
 \newpage
 
-\bibliographystyle{unsrt}%Used BibTeX style is unsrt
-\bibliography{biblio.bib}
+%\bibliographystyle{unsrt}%Used BibTeX style is unsrt
+\bibliographystyle{plainnat}
+\bibliography{biblio.bib,biblio2.bib}
 
 
 
