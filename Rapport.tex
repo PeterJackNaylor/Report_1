@@ -46,6 +46,8 @@
 
 \usepackage{natbib}
 
+\usepackage{multicol}
+\usepackage{graphicx}
 
 %\usepackage{algorithm2e}
 
@@ -433,7 +435,11 @@ The tissue samples were extracted from the patients in two steps, first was perf
 
 The scheme for this part can be seen in \ref{ComputerVision}, this scheme is similar in the first steps to those performed in the camelyon challenge 2016. In this first steps, we wish to find regions of interest, which can be resumed to finding the tissue areas in the WSI. The data here was a lot more messier, same annotation were performed via a marker on several slides and had to be removed. The slide label was also in most of the WSI and had to be removed via a pixel value segmentation. Once the tissue information was discovered in the WSI we extracted small patches of size 512 x 512.
 
-We wish to create biological features with the help of the pathologist. Similar to the work done in \cite{yuan2012quantitative}, we wish to have revelant features. In \citep{yuan2012quantitative} they have features involving the number of Lymphocytes counts, number of stromal, cancer cells, WSI density profiles, mitotic density counts and so on. However in order to create this biological driven features we have to properly segment the histopathology data. Due to the recent advances in deep neural networks and lately for their performances in segmentation for medical imaging, see \cite{UNet}
+We wish to create biological features with the help of the pathologist. Similar to the work done in \cite{yuan2012quantitative}, we wish to have revelant features. In \citep{yuan2012quantitative} they have features involving the number of Lymphocytes counts, number of stromal, cancer cells, WSI density profiles, mitotic density counts and so on. However in order to create this biological driven features we have to properly segment the histopathology data. Due to the recent advances in deep neural networks and lately for their performances in segmentation for medical imaging, see \cite{UNet} and \ref{FCN}. 
+In order to reproduce some fo the work done in \cite{UNet} and \cite{FCN} I had to become familiar with GPU hardware and with the caffe librabry: \url{http://caffe.berkeleyvision.org/} and the associated paper: \cite{jia2014caffe}. Good hardware becomes a necessity when training deep network as it can increase the computation time by x50. The Center for computational biology had a GEFORCE GTX TITAN Z NVIDIA graphics card. I am still struggling to install it. 
+Once the GPU installed, I will be able to fine tune an Fully Convolutionnal Network (FCN) for semantic segmentation, see \ref{FCN}. On a different note, we will need annotated data for this segmentation task. I will therefore be providing pathologist with a software to enable them to create manual segmentation of the image, via the ITK-SNAP toolkit: \cite{py06nimg} that can be found at \url{www.itksnap.org}. An issue with creating our own ground-truth is related to the tediousness and yet complicated manual segmentation. In one image you can find up to 50 or 60 cells, so it can be a long procedure but we can't ask the pathologist to annotate more then 20 images. To counter balance this lack in data, which is crucial with respect to the training of deep networks, we will augment the data set as described in \cite{UNet} by manual flipping, rotations, creating out of focus effect and by doing elastic transformations of the image. Data augmentation is an important step for the training as it is thanks to these multiple transformations that our model will learn the appropriate invariances. We augmentate the data by shift, \ref{fig:shift}, by rotation, \ref{fig:rot}, by flipping it, \ref{fig:flip} and by doing elastic distortions, \ref{fig:elastic}. Creating out of focus images out to augment the data can also be used to learn invariances corresponding to errors of focus related to the scanner, see figure \ref{fig:blur}.
+
+
 
 \begin{figure}[!ht]
 \centering
@@ -441,6 +447,49 @@ We wish to create biological features with the help of the pathologist. Similar 
 \caption{Computer Vision aspect}
 \label{ComputerVision}
 \end{figure}
+
+
+\begin{figure}
+\begin{multicols}{3}
+	\begin{subfigure}{0.33\textwidth}
+    \includegraphics[width=\linewidth]{BIS.png}\par 
+     \caption{Original image}
+     \label{fig:original}
+	\end{subfigure}%
+	\begin{subfigure}{0.33\textwidth}
+    \includegraphics[width=\linewidth]{shift.png}\par 
+    \caption{Translated}
+    \label{fig:shift}
+	\end{subfigure}%
+	\begin{subfigure}{0.33\textwidth}
+    \includegraphics[width=\linewidth]{rot.png}\par 
+     \caption{Rotated}
+     \label{fig:rot}
+	\end{subfigure}%
+\end{multicols}
+\begin{multicols}{3}
+
+    \begin{subfigure}{0.33\textwidth}
+    \includegraphics[width=\linewidth]{flip.png}\par 
+     \caption{Vertical flip}
+     \label{fig:flip}
+	\end{subfigure}%
+	\begin{subfigure}{0.33\textwidth}
+    \includegraphics[width=\linewidth]{blur.png}\par 
+    \caption{Out of focus}
+    \label{fig:blur}
+	\end{subfigure}%
+	\begin{subfigure}{0.33\textwidth}
+    \includegraphics[width=\linewidth]{ELAST.png}\par 
+     \caption{Elastic deformation}
+     \label{fig:elastic}
+	\end{subfigure}%
+\end{multicols}
+\caption{Data augmentation}
+\end{figure}
+
+
+
 %\begin{figure}[!ht]
 %\centering
 %\includegraphics[width=\textwidth]{}
@@ -448,7 +497,6 @@ We wish to create biological features with the help of the pathologist. Similar 
 %\label{}
 %\end{figure}
 
-\section*{Results}
 \begin{table}[!ht]
 \centering
 \begin{footnotesize}
