@@ -19,7 +19,7 @@
 \usepackage{booktabs}
 %\usepackage{moreverb}
 
-\usepackage{cite}
+%\usepackage{cite}
 \DeclareMathAlphabet{\mathonebb}{U}{bbold}{m}{n}
 \newcommand{\one}{\ensuremath{\mathonebb{1}}}
 
@@ -55,11 +55,16 @@
 %\usepackage{a4wide}
 \hoffset -1cm
 \voffset -2cm
-\textheight 23cm
+\textheight 25cm
 \headheight 1cm
 \headsep 1cm
 \topmargin 0cm
 \textwidth 16cm
+
+%to change temporaly a margin
+\def\changemargin#1#2{\list{}{\rightmargin#2\leftmargin#1}\item[]}
+\let\endchangemargin=\endlist 
+
 
 %pour les couleurs
 \usepackage{color}
@@ -206,32 +211,37 @@ Towards image-based cancer signatures from histopathology data
  Cancer diagnosis involves complex interpretation of a multitude of heterogeneous data, such as genomic, transcriptomic and image data. The image data used in this context corresponds to thin slices of the tumor and of the surrounding tissue, stained with agents in order to highlight specific structures, such as cell nuclei or collagen. The image data is what we call histopathology data.
 A medical practitioner will routinely check the patients histopathology image data in order to decide the next step in the patient's treatment. Histopathology slides can thus be very informative of the cancer subtype and/or of how the patient's immune system is reacting to the cancer. Adding relevant information extracted from histopathology slides will help make better prognosis for cancer treatment and in particular, help better understand cancer process. 
 
- We wish to discover appropriate tools to quantify the huge amount of data found in histopathology slides. On the long run, such a quantification scheme would fit in a work pipeline that would investigate the most informative physiological features and the links to genomic, transcriptomic features and even possibly different medical imaging such as 3D MRI scans.
+ We wish to build appropriate tools to quantify the huge amount of data found in histopathology slides. On the long run, such a quantification scheme would fit in a work pipeline that would investigate the most informative physiological features and the links to genomic, transcriptomic features and even possibly different medical imaging such as 3D MRI scans.
  
  I will give a chronological assessment of my work starting by January, even though I officially started my PhD in November, I took two extra months to finish my master's project that is now currently on hold. This master project was also in the field of machine learning and computer vision, however it was not applied to histopathology data but to live imaging of fluorescent microscopic data. 
 
 
 \subsection*{PhD subject}
 
-This  PhD  project is a first step in integrating morphological and phenotypic information at the cellular and tissular scale into a bioinformatics workflow. We wish to be able to apply these two datasets, for the moment I have only worked on one of these data sets. This data is unpublished and will focus on breast cancer, a special type of very aggressive cancer. In this application, we hope to identify links between cellular phenotypes, transcriptomic and grading data that will feed future projects in this field with interesting hypotheses. 
+This  PhD  project is a first step in integrating morphological and phenotypic information at the cellular and tissular scale into a bioinformatics workflow. Acquiring phenotypic information requires segmentation methods that our easily adaptable to new data sets. Identifying the different objects segmented in the image follows, such as detecting cells with their phenotypic categories, detecting metastasis regions. On top of this, we can derive original features describing the spatial distributions of all of these classes. To quantify the relevance of our method we will to apply  our methods to two datasets: (1) 208 slides from an unpublished study on breast cancer, a special type of very aggressive breast cancer  and (2) 198 slides from a recently published study on bladder cancer \citep{biton2014independent}. In these two applications we are investigating the phenotypic implications of the molecularly defined subgroups and the predictability of treatment response by automatic analysis of histopathology data.  We hope to identify links between cellular phenotypes, transcriptomic and grading data that will feed future projects in this field with interesting hypotheses. All of the methods developed in this project will be made publicly available to the scientific community by integrating them into the open source software CellCognition (http://www.cellcognition.org). For the moment, I have only had access to dataset (1).
 
-\subsection*{Context}
+\subsection*{Context and related work}
 
 
-Extracting biological data from image data is a difficult task as one must be able to identify entities within histopathology slides. Image segmentation and object recognition in medical imagining has been tackled for many years and many approaches have been found. Raw feature extraction via morphological operators is a classical method as it enables a user to manually define what type of information he wishes to extract, \cite{irshad2014methods}. Segmentation methods based on strong priori are also possible and yield comparable results, see \cite{ranefall2016fast}. Alternative methods have arose from the achieving Convolutional neural networks, \cite{lecun}, in particular with the very impressive results that we have had in computer vision, \cite{ImageNet}. Recent advances in deep neural network, and in particular in their optimization have made them become the state-of-the-art model for computer vision. Convolutional neural networks were the first neural network in computer vision and succeed in becoming a benchmark for the MNIST data set \cite{lecun}, also very recently many others types of neural networks have become top of their respective field, we can think of the pascal voc challenge with \cite{ImageNet}, semantic segmentation problems, cite{FCN}. We can also think of Go 
+Extracting biological features from image data is a difficult task as one must be able to identify entities within histopathology slides. Image segmentation and object recognition in medical imagining have been tackled for many years and many approaches have been found. Raw feature extraction via morphological operators is a classical method as it enables a user to manually define what type of information he wishes to extract \citep{irshad2014methods}. Segmentation methods based on a strong priori information are also possible and yield comparable results \citep{ranefall2016fast}. Graph-based tools for segmentation are also possible in histopathology \citep{ta2009graph}. \citet{manivannanlocal} focus on gland segmentation, they achieve good results by predicting image patches as a whole, via a classification scheme. The output confidence vector is then preprocessed to obtain the final segmentation. Alternative methods have arose from the achieving Convolutional neural networks \citep{lecun}, in particular strong incentive rose with the very impressive results that they achieved in the pascal voc challenge with \citet{ImageNet}. Recent advances in deep neural network, and in particular in their optimization have made them become the state-of-the-art model for object recognition. 
+%Convolutional neural networks were the first neural network in computer vision and succeed in becoming a benchmark for the MNIST data set \citep{lecun}, 
+This trend has spread to other fields, we can think of semantic segmentation problems \citep{long2015fcn}. We can also look at the game Go 
 %"Artificial Intelligence" in Go
-, see \cite{AlphaGo}. Naturally people have applied deep learning models to medical imaging, as in \cite{UNet}. It seems unavoidable that I need to try and test deep neural networks, mainly for the segmentation of histopathology slides.
+\citep{AlphaGo}. Naturally people have applied deep learning models to medical imaging, as in \citet{UNet}. It seems unavoidable that I need to try and test deep neural networks, mainly for the segmentation of histopathology slides.
 % The first part of this report, I tried applying classical methods with respect to the computer vision aspect. Such as manually creating features in order to recognize such and such aspect on the histopatholigical images.
+Other work have applied deep networks to histopathology, not for segmentation although: \citet{cirecsan2013mitosis} use convolutionnal neural network to detect cells undergoing mitotic events, \citet{jiajia2016automatic} pairs a convolutional neural network and manual biological driven features to grade histopathological tissue.
 
-On a different aspect, many have used biological driven features such as in \citet{yuan2012quantitative} where lymphocyte counts, cancer cells, heat maps of spatial distribution have an effect in the statistical model. mixting heteregenous data, such as we have here can be very complicated. Many have used image data to correct molecular based data, such as . In \cite{yuan2012quantitative}, they used image data to represent in a quantitative way the heterogeneous cell populations in order to use the heterogeneity in the analysis to correct molecular profiles. Evaluating tumor heterogenity is an important aspect, in \cite{potts2012evaluating} they quantify cell heterogeneity in two ways, intratumoral, linked to variability among cells within a tumor, and intertumoral which is linked to tumor heterogeneity within the the whole tissue. In \cite{potts2012evaluating} paper they increase the accuracy of HER2 scoring by adding image features based on spatial distribution and local neighbourhoods. In \cite{petushi2006large}, they show that we can extract relevant data from the images in order to create reproducible grading, reproducibility of the grading assigned by pathologists is a constant issue as it can highly variable from one pathologist to another, and even from one hospital to another. 										
+Image-based biological features are studied and are emerging: \citet{yuan2012quantitative} segment nucleis in histological data to access information about lymphocyte counts, cancer cells counts, heat maps of spatial distribution in order to improve accuracy. They also use these biological driven features to correct statistical models based on molecular data, indeed they asses that these biological driven features quantify the heterogeneous cell populations that is a source of noise. Evaluating tumor heterogenity is an important aspect, in \citet{potts2012evaluating} they quantify cell heterogeneity in two ways, intratumoral, linked to variability among cells within a tumor, and intertumoral which is linked to tumor heterogeneity within the whole tissue. They increase the accuracy of HER2 scoring by better quantifying the heterogeneity via features based on spatial distribution and local neighbourhoods. \citet{harder2016cooccurence} find relevant biological features that quantify the invasion of the tumor, in particular these features are based on spatial and neighbourhood analysis. In \citet{petushi2006large}, they show that we can extract relevant data from the images in order to create reproducible grading. Reproducibility of the grading is a key goal for computer aided diagnostics, indeed breast cancer grading and many others can be highly variable from one pathologist to another, even from one hospital to another. 										
 
 
-I started my PhD by focusing on a ISBI2016 challenge, this challenge was a very interesting topic as it is very similar to my PhD project. This challenge dealt with histopathological images acquired from breast tissue with a Philips scanner, the raw data was under a tiff format which is a special image format used for histopathological data. Participating in this challenge enabled me to have a first experience with histopathology data, becoming familiar with classical computer vision approaches and finally allowed me to use strong computational resources,via a cluster of computers. However, this challenge did not involve any crossing between heterogeneous types of data such as those describe in the earlier paragraphs.
+I started my PhD by focusing on a ISBI2016 challenge, this challenge was a very interesting introduction to my PhD as the data is similar to the ones I will be using. But it can be also seen as a metastasis detection/localization problem. This challenge dealt with histopathological images acquired from breast tissue with a Philips scanner, the raw data was under a tiff format which is a special image format used for histopathological data. Participating in this challenge enabled me to have a first experience with histopathology data, becoming familiar with classical computer vision approaches and finally allowed me to use strong computational resources, via a cluster of computers. However, this challenge did not involve any crossing between heterogeneous types of data such as those describe in the earlier paragraphs. Participating in this challenge was a first opportunity for me to tackle a metastasis detection challenge with a huge amount of segmentation annotation, which is fairly rare.
 %\section{November 2015 - January 2016: MitoCheck Project}
 
 \section{January 2016 - April 2016: Camelyon2016 challenge}
 
-The Challenge was organized in conjunction with the support of the 2016 IEEE International Symposium on Biomedical Imaging  (ISBI-2016) and this is the first challenge using whole-slide images in histopathology. This challenge fitted particularly well with my PhD time table as the data used in this challenge is very similar to the data acquired by F. Reyal. However, our final ranking was not very satisfying as we did not achieve good results. This work was done with the help of V. Machairas, T. Walter and E. Decenciere. A website was made for the purpose of this challenge, \url{http://camelyon16.grand-challenge.org/home/}.
+The Challenge was organized in conjunction with the support of the 2016 IEEE International Symposium on Biomedical Imaging  (ISBI-2016) and this is the first challenge using whole-slide images in histopathology. This challenge fitted particularly well with my PhD time table as the data used in this challenge is very similar to the data acquired by F. Reyal. 
+%However, our final ranking was not very satisfying as we did not achieve good results.
+This work was done with the help of V. Machairas, T. Walter and E. Decenciere. A website was made for the purpose of this challenge, \url{http://camelyon16.grand-challenge.org/home/}.
 
 \subsection{Context}
 The goal of this challenge is to evaluate new and existing algorithms for automated detection of metatases in hematoxylin and eosin (HE) stained whole-slide images of lymph node sections, see figure \ref{LymphNode} This task has a high clinical relevance but requires large amounts of reading time from pathologists. Therefore, a successful solution would hold great promise to reduce the workload of the pathologists while at the same time reduce the subjectivity in diagnosis. The Camelyon2016 challenge will focus on sentinel lymph nodes of breast cancer patients and 2 large datasets have been provided from both the Radboud University Medical Center (Nijmegen, the Netherlands), as well as the University Medical Center Utrecht (Utrecht, the Netherlands). The focus on lymph nodes of breast cancer patients is not arbitrary, lymph node metastases occur in most cancer types (e.g. breast, prostate, colon). Lymph nodes are small glands that filter lymph, the fluid that circulates through the lymphatic system. The lymph nodes in the underarm are the first place breast cancer is likely to spread. Metastatic involvement of lymph nodes is one of the most important prognostic variables in breast cancer. Prognosis is poorer when cancer has spread to the lymph nodes.
@@ -259,7 +269,7 @@ The data in this challenge contains a total of 400 whole-slide images (WSIs) of 
 \subsection{Classification problem}
 There was two evaluations and therefore two distinct scoreboards for this challenge. The first is slide based and can be seen as a binary classification, given a Whole-slide Images (WSI) we had to give a confidence score that this WSI contained metastases. The final score for this evaluation was given by the area under the curve (or ROC curve) asserted over 130 test slides. The second was a lesion-based evaluation, this evaluation was aimed to asses the metastases detection within a given slide. This within slide evaluation was measured via a free-response receiver operating characteristic (FROC). This is similar to ROC curve analysis, except that the false positive rate on the x-axis is replaced by the average number of false positives per image. For this challenge, our detection will be considered a true positive, if it falls within an annotated ground truth lesion. The FROC curve is defined as the plot of sensitivity versus the average number of false-positives per image. 
 
-Due to limited time, we tackled these two evaluations as a pixel classification problem in a supervised setting. Each pixel is described by a vector of features $x \in \mathbb{R}^P$. The training set is composed of a set of such vectors $x^T$,combined in the data matrix $X \in \mathbb{R}^{N \times P}$ and the corresponding labels $Y \in \{0,1\}^N$, provided by the challenge annotators. 
+Due to limited time, we tackled these two evaluations as a pixel classification problem in a supervised setting. However for the rest of this paper, I have omitted the second evaluation as we did not correctly perform the pre processing step. Each pixel is described by a vector of features $x \in \mathbb{R}^P$. The training set is composed of a set of such vectors $x^T$,combined in the data matrix $X \in \mathbb{R}^{N \times P}$ and the corresponding labels $Y \in \{0,1\}^N$, provided by the challenge annotators. 
 %The concatenation of all vectors is denoted by $X \in
 The computational steps and design choices that had to be made can be categorized as follows: 
 \begin{enumerate}
@@ -294,7 +304,7 @@ Some of the decisions made in this section where a necessity due to the technolo
 
 \subsubsection*{Pre-processing}
 
-In order to access relevant information in such a tiff file, we had to think carefully as how to segment the whole image to have relevant patches, these patches were a necessity to process the information contained in the slide (Memory constraints). As a WSI is mostly composed of white, processing only the patches containing tissue is used. We applied a threshold segmentation of the WSI at a low resolution, taking the image at a low resolution allowed us to cover the whole image. Once the region of interest were found, we extracted small patches at a very high resolution (resolution number 2) randomly from the WSI. 300 to 400 images of size 1000 x 1000 were extracted per WSI on average. We then applied color deconvolution \cite{deconvolution} to the smaller images in order to obtain a physicologically relevant representation
+In order to access relevant information in such a tiff file, we had to think carefully as how to segment the whole image to have relevant patches, these patches were a necessity to process the information contained in the slide (Memory constraints). As a WSI is mostly composed of white, processing only the patches containing tissue is used. We applied a threshold segmentation of the WSI at a low resolution, taking the image at a low resolution allowed us to cover the whole image. Once the region of interest were found, we extracted small patches at a very high resolution (resolution number 2) randomly from the WSI. 300 to 400 images of size 1000 x 1000 were extracted per WSI on average. We then applied color deconvolution \citep{deconvolution} to the smaller images in order to obtain a physicologically relevant representation
 of the color information. This was done in order to reduce the
 computational burden for the subsequent steps.
 %A set of 100 \textit{Superpixel-Adaptive Features} (SAF) were used to
@@ -317,11 +327,11 @@ sizes of structuring elements with V6 neighborhood); Haralick texture
 features (averaged on all directions). We also applied a family of features based
 on Gaussians: difference of gaussians (faster approximation of the
 laplacian), eigenvalues of the structure tensor, eigenvalues of
-hessian of gaussian based, this family of features are the same set found in the software Ilastik, see \cite{Ilastik}.
+hessian of gaussian based, this family of features are the same set found in the software Ilastik, \url{http://www.ilastik.org/} \citep{Ilastik}.
 
 We evaluated these features on superpixel regions: we first calculated
 a partition of the image into superpixels. Here, we used
-\textit{waterpixels} \cite{waterpixels}, as they feature good
+\textit{waterpixels} \citep{waterpixels}, as they feature good
 adherence to real object boundaries and they are very fast to
 compute.  In particular, this allowed us to calculate several
 superpixel partitions with different size parameters, therefore capturing
@@ -367,11 +377,13 @@ entire data set.
   then to learn an SVM with and RBF kernel. 
 \end{enumerate}
 
-Once we have a trained classifier, this allowed us to predict several WSI (via down-sampling) in order to obtain probability maps corresponding to pixel based confidence map of each pixel belonging to a metastasis. Given the results on the cross-validation we choose a Random Forest model as it outperformed on F1-score metricy. Also, the prediction probability maps on most slides were a lot less noisy than the ones acquired by the Support Vector Machine. The results and parameter tuning are given in table \ref{Cross_val: RF}. We can also take a look at \ref{ProbabilityMapLocalMaxima} which is the output given by our algorithm for the test WSI number 2.
+Once we have a trained classifier, this allowed us to predict several WSI (via down-sampling) in order to obtain probability maps corresponding to pixel based confidence map of each pixel belonging to a metastasis. Given the results on the cross-validation we choose a Random Forest model as it outperformed on the F1-score. Also, after visual inspection of the probability maps, we thought that the maps produce by the random forest were a lot less noisy than the ones acquired by the Support Vector Machine. The results and parameter tuning are given in table \ref{Cross_val: RF}. We can also take a look at \ref{ProbabilityMapLocalMaxima} which is the output given by our algorithm for the test WSI number 2.
 
 \subsubsection*{Post-processing}
 
-Once we have the probability map of a WSI at a lower resolution we have to decide how to extract the information to better suit the two different tasks. On the one hand, for the slide base evaluation, as we choose a RF model, we could easily take the maximum value of the probability map as the confidence score of this WSI containing metastasis. On the other hand, for the lesion-based evaluation, it was difficult as we had to detect each distinct metastasis, but also miss as little as possible. We proceeded as the following: we smoothed the image by applying a gaussian filter followed by an extraction of a local maxima within a connected component as to to reduce this connected region to a single data point. We can take a look at figure \ref{Detecting maxima} as an example of our metastasis location within a WSI.
+Once we have the probability map of a WSI at a lower resolution we have to decide how to extract the information to better suit the two different tasks, in this report we will describe the procedure for the slide base evaluation. As we choose a RF model, we could take as confidence score of the WSI containing metastasis the maximum value of the probability map. 
+%On the other hand, for the lesion-based evaluation, it was difficult as we had to detect each distinct metastasis, but also miss as little as possible. We proceeded as the following: we smoothed the image by applying a gaussian filter followed by an extraction of a local maxima within a connected component as to to reduce this connected region to a single data point.
+For the second evaluation, we can take a look at figure \ref{Detecting maxima} as an example of our metastasis location within a WSI.
 
 \begin{figure}[!ht]
 \centering
@@ -400,14 +412,15 @@ Once we have the probability map of a WSI at a lower resolution we have to decid
 
 \subsubsection*{Technological difficulties}
 
-Due to the very large size of each WSI, we encountered several difficulties due to data transfer. We have at our disposal 2 clusters, the cluster at Fontainebleau and the one in Curie. I used the one put at disposal by Les Mines at Fontainebleau. This cluster has 424 nodes with several machines of different capacities. However one issue seriously troubled us and slowed us down, before submitting any jobs to the cluster we performed tests on our local machine in order to access the computation time to evaluate the waiting time. From experience (not my own), it is normal to have a factor 2 or 3 to the computation time for a single job, however here we encountered a factor 100. It took us a considerable amount of time to figure out what the problem was. It had nothing to do with the code, the issue was related to data transfer and in particular with the transfer of the data to a single node of the cluster. On our cluster, a node can access up to 125 MB / s, which is 8 times slower than on my desktop computer. As we had tera bytes of data to transfer this was painfully slow. This limitation, explained only a week before the end of the challenge made every step more complicated. We had to have a clear subsampling strategies in order to make the data as small and as relevant as possible. For instance, applying the color deconvolution in order to have only 2 color channels instead of 3 immediately reduced the size of the datasets by $\frac{1}{3}$. This computation limitation enforced us to have fewer features, experiences and tests. Another issue also related to data transfer, concerns the evaluation scheme with respect to the tuning of each model, we couldn't use the same metric as the one given by the challenge as this one implies predicting over a WSI. This was not possible in terms of time and of computation, instead we had to maximize over the F1-score, see table \ref{Cross_val: RF}.
+Due to the very large size of each WSI, we encountered several difficulties due to data transfer. We have at our disposal 2 clusters, the cluster at Fontainebleau and the one in Curie. This was my first experience using a cluster with a non high-level language. I used the cluster put at disposal by Les Mines at Fontainebleau. This cluster has 424 nodes with several machines of different capacities. However one issue seriously troubled us and slowed us down all along the way as we only understood it close to the deadline, the data transfer speed on our cluster is very low, therefore transferring terabytes of data was very slow. This computation limitation enforced us to have fewer features, experiences and tests. Another issue also related to data transfer, concerns the evaluation scheme with respect to the tuning of each model, we couldn't use the same metric as the one given by the challenge as this one implies predicting over a WSI. This was not possible in terms of time and of computation, instead we had to maximize over the F1-score, see table \ref{Cross_val: RF} for the results for the random forest and table \ref{Cross_val: SVM} for those with the SVM with the RBF kernel.
 
+Another difficulty was opening the data files, we used the OpenSlide library that is written in C++.
 This challenge was very rewarding as the he taught me a huge amount about cluster policies, organisation and use!
 
 
 \subsection{Challenge Results and ISBI 2016}
 
-As I participated to this challenge it was interesting for me to attend the presentations concerning it. We were 22 out of 23 on the first leader board and our ROC curve is displayed in figure \ref{Eval: ROC}. We reached 0.63\% of area under the curve. We ended last in the second score board as our post-processing step was not reducing enough the amount of detected metastasis. To better explain this aspect, let's have a closer look at figure \ref{Detecting maxima}, on the lower part of the tissue we have two red point indicating this area contains a high confidence of containing a metastasis. However their is two points, if we are mistaken this will lead to two false positives. It is also interesting to note that only 3 teams used classical methods to extract information from the WSI. The best of these three teams reached an area under the ROC curve of 0.76\% and finished 11. The 3rd team performing classical methods was last. After a brief presentation of the best performing team within classical extraction method, we hope that our method could reach 0.76\% via a better tuning, with respect to the feature, model parameters and model evaluation. However, all the other teams used Convolutionnal Neural Networks and achieved much better result than our classical methods. This gave us a clear view of my next interest, deep neural networks.
+As I participated to this challenge it was interesting for me to attend the presentations concerning it. We were among the 208 teams that submitted a solution. We obtained an Area Under the Curve of 0.63 and obtained a final ranking 22nd, see figure \ref{Eval: ROC}. Of the 23 submissions, only 3 used "classical methods" (on the contrary to neural networks) to extract information from the WSI. The best of these three teams reached an area under the ROC curve of 0.76 and finished 11. The 3rd team performing classical methods was last. After a brief presentation of the best performing team within classical extraction method, we would hope that our method could reach 0.76 via a better tuning, with respect to the feature, model parameters and model evaluation. Indeed, they had the same pipeline with the same main parts as ours. However, all the other teams used pre-trained or existing architecture and achieved much better result than the classical methods. This gave us a clear view of my next interest, deep neural networks.
 
 \begin{figure}[!ht]
 \centering
@@ -416,7 +429,7 @@ As I participated to this challenge it was interesting for me to attend the pres
 \label{Eval: ROC}
 \end{figure}
 
-The conference was held in Prague, I also attended a tutorial on deep neural networks that was given at the end. It lasted 4 days and to the surprise of some, histopathology has gained in popularity as you could easily end up listening to only histopathology talks. In most histopathology talks, neural network, the state of the art in image processing were used and it seems, as I focus on application, it is essential for me to try and to apply deep convolutionnal network.
+This challenge might have been a bit early for me to be truly competitive. Some of the finalist, were advanced labs that tackle on a daily bases segmentation problems. This was my very first experience dealing with histopathology data, mathematical morphology, cluster of computers and team work among different labs. The conference was held in Prague, I also attended a tutorial on deep neural networks that was given at the end. It lasted 4 days and to the surprise of some, histopathology has gained in popularity as you could easily end up listening to only histopathology talks. In most histopathology talks, neural network, the state of the art in image processing were used. It seems, as I focus on application, that it is essential for me to try and to apply deep convolutionnal network.
 
 
 \section{May 2016 and future work}
@@ -438,8 +451,8 @@ The tissue samples were extracted from the patients in two steps, first was perf
 
 The scheme for this part can be seen in \ref{ComputerVision}, this scheme is similar in the first steps to those performed in the camelyon challenge 2016. In this first steps, we wish to find regions of interest, which can be resumed to finding the tissue areas in the WSI. The data here was a lot more messier, same annotation were performed via a marker on several slides and had to be removed. The slide label was also in most of the WSI and had to be removed via a pixel value segmentation. Once the tissue information was discovered in the WSI we extracted small patches of size 512 x 512.
 
-We wish to create biological features with the help of the pathologist. Similar to the work done in \cite{yuan2012quantitative}, we wish to have revelant features. In \citep{yuan2012quantitative} they have features involving the number of Lymphocytes counts, number of stromal, cancer cells, WSI density profiles, mitotic density counts and so on. However in order to create this biological driven features we have to properly segment the histopathology data. Due to the recent advances in deep neural networks and lately for their performances in segmentation in medical imaging, see \cite{UNet} and \ref{FCN}. I wished to become more familiar, to do so I familiarized myself with GPU hardware and with the caffe librabry: \url{http://caffe.berkeleyvision.org/} and the associated paper: \cite{jia2014caffe}. Good hardware becomes a necessity when training deep network as it can increase the computation time by x50. The Center for computational biology had a GEFORCE GTX TITAN Z NVIDIA graphics card and I am still struggling to install it. 
-Once the GPU installed, I will be able to fine tune an Fully Convolutionnal Network (FCN) for semantic segmentation, see \ref{FCN}. On a different note, we will need annotated data for this segmentation task. I will therefore be providing pathologist with a software to enable them to create manual segmentation of the image, via the ITK-SNAP toolkit: \cite{py06nimg} that can be found at \url{www.itksnap.org}. An issue with creating our own ground-truth is related to the tediousness and yet complicated manual task of segmentation. In one image you can find up to 50 or 60 cells, so it can be a very long procedure and we can't ask a single pathologist to annotate more then 20 images. To counter balance this lack in data, which is crucial with respect to the training in deep networks, we will augment the data set as described in \cite{UNet} by manual flipping, rotations, creating out of focus effect and by doing elastic transformations of the image. Data augmentation is an important step for the training as it is thanks to these multiple transformations that our model will learn the appropriate invariances. We augment the data by shift, \ref{fig:shift}, by rotation, \ref{fig:rot}, by flipping it, \ref{fig:flip} and by doing elastic distortions, \ref{fig:elastic}. Creating out of focus images out to augment the data can also be used to learn invariances corresponding to errors of focus related to the scanner, see figure \ref{fig:blur}.
+We wish to create biological features with the help of the pathologist. Similar to the work done in \citet{yuan2012quantitative}, we wish to have revelant features. In \citep{yuan2012quantitative} they have features involving the number of Lymphocytes counts, number of stromal, cancer cells, WSI density profiles, mitotic density counts and so on. However in order to create this biological driven features we have to properly segment the histopathology data. Due to the recent advances in deep neural networks and lately for their performances in segmentation in medical imaging \citep{UNet,long2015fcn}. I wished to become more familiar, to do so I familiarized myself with GPU hardware and with the caffe librabry: \url{http://caffe.berkeleyvision.org/} \citep{jia2014caffe}. Good hardware becomes a necessity when training deep network as it can increase the computation time by x50. The Center for computational biology had a GEFORCE GTX TITAN Z NVIDIA graphics card and I am still struggling to install it. 
+Once the GPU installed, I will be able to fine tune an Fully Convolutionnal Network (FCN) for semantic segmentation \citep{long2015fcn}. On a different note, we will need annotated data for this segmentation task. I will therefore be providing pathologist with a software to enable them to create manual segmentation of the image, via the ITK-SNAP toolkit: \url{www.itksnap.org} \citep{py06nimg}. An issue with creating our own ground-truth is related to the tediousness and yet complicated manual task of segmentation. In one image you can find up to 50 or 60 cells, so it can be a very long procedure and we can't ask a single pathologist to annotate more then 20 images. To counter balance this lack in data, which is crucial with respect to the training in deep networks, we will augment the data set as described in \citet{UNet} by manual flipping, rotations, creating out of focus effect and by doing elastic transformations of the image. Data augmentation is an important step for the training as it is thanks to these multiple transformations that our model will learn the appropriate invariances. We augment the data by shift, \ref{fig:shift}, by rotation, \ref{fig:rot}, by flipping it, \ref{fig:flip} and by doing elastic distortions, \ref{fig:elastic}. Creating out of focus images out to augment the data can also be used to learn invariances corresponding to errors of focus related to the scanner, see figure \ref{fig:blur}.
 
 
 
@@ -450,46 +463,44 @@ Once the GPU installed, I will be able to fine tune an Fully Convolutionnal Netw
 \label{ComputerVision}
 \end{figure}
 
-
 \begin{figure}
 \begin{multicols}{3}
-	\begin{subfigure}{0.33\textwidth}
-    \includegraphics[width=\linewidth]{BIS.png}\par 
+	\begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=0.9\textwidth]{BIS.png}\par 
      \caption{Original image}
      \label{fig:original}
 	\end{subfigure}%
-	\begin{subfigure}{0.33\textwidth}
-    \includegraphics[width=\linewidth]{shift.png}\par 
+	\begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=0.9\textwidth]{shift.png}\par 
     \caption{Translated}
     \label{fig:shift}
 	\end{subfigure}%
-	\begin{subfigure}{0.33\textwidth}
-    \includegraphics[width=\linewidth]{rot.png}\par 
+	\begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=0.9\textwidth]{rot.png}\par 
      \caption{Rotated}
      \label{fig:rot}
 	\end{subfigure}%
 \end{multicols}
 \begin{multicols}{3}
 
-    \begin{subfigure}{0.33\textwidth}
-    \includegraphics[width=\linewidth]{flip.png}\par 
+    \begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=0.9\textwidth]{flip.png}\par 
      \caption{Vertical flip}
      \label{fig:flip}
 	\end{subfigure}%
-	\begin{subfigure}{0.33\textwidth}
-    \includegraphics[width=\linewidth]{blur.png}\par 
+	\begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=0.9\textwidth]{blur.png}\par 
     \caption{Out of focus}
     \label{fig:blur}
 	\end{subfigure}%
-	\begin{subfigure}{0.33\textwidth}
-    \includegraphics[width=\linewidth]{ELAST.png}\par 
+	\begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=0.9\textwidth]{ELAST.png}\par 
      \caption{Elastic deformation}
      \label{fig:elastic}
 	\end{subfigure}%
 \end{multicols}
 \caption{Data augmentation}
 \end{figure}
-
 
 
 %\begin{figure}[!ht]
@@ -500,6 +511,7 @@ Once the GPU installed, I will be able to fine tune an Fully Convolutionnal Netw
 %\end{figure}
 
 \begin{table}[!ht]
+
 \centering
 \begin{footnotesize}
 \begin{tabular}{llllrrrr}
@@ -569,11 +581,203 @@ Once the GPU installed, I will be able to fine tune an Fully Convolutionnal Netw
 \caption{Performance estimated for our type of random forests by cross validation (10-fold)}
 \label{Cross_val: RF}
 \end{table}
+
+\newpage
+
+\newgeometry{left=2.3cm,bottom=0.5cm,right=-1cm}
+
+\begin{table}[!ht]
+\begin{multicols}{2}
+\centering
+\begin{scriptsize}
+\begin{tabular}{|lllrrrr|}
+\toprule
+   c   &   gamma    &  n\_samples   &  Precision &     Recall &         F1 &   Accuracy \\
+\midrule
+0.001 & 0.001 & 10000 &            &            &            &            \\
+      &       & 2000 &       1.00 &       0.10 &       0.18 &       0.10 \\
+      &       & 5000 &       1.00 &       0.11 &       0.20 &       0.12 \\
+      & 0.01 & 10000 &       1.00 &       0.11 &       0.20 &       0.11 \\
+      &       & 2000 &       0.92 &       0.17 &       0.29 &       0.49 \\
+      &       & 5000 &       0.85 &       0.21 &       0.33 &       0.56 \\
+      & 0.1 & 10000 &       0.90 &       0.18 &       0.29 &       0.50 \\
+      &       & 2000 &       1.00 &       0.12 &       0.21 &       0.12 \\
+      &       & 5000 &       0.83 &       0.15 &       0.22 &       0.29 \\
+      & 1 & 10000 &       1.00 &       0.11 &       0.21 &       0.11 \\
+      &       & 2000 &       1.00 &       0.12 &       0.22 &       0.12 \\
+      &       & 5000 &       1.00 &       0.11 &       0.19 &       0.11 \\
+      & 10 & 10000 &       1.00 &       0.10 &       0.18 &       0.10 \\
+      &       & 2000 &       1.00 &       0.12 &       0.22 &       0.12 \\
+      &       & 5000 &       1.00 &       0.08 &       0.15 &       0.08 \\
+      & 100 & 10000 &       1.00 &       0.11 &       0.20 &       0.11 \\
+      &       & 2000 &       1.00 &       0.12 &       0.21 &       0.12 \\
+      &       & 5000 &       1.00 &       0.08 &       0.15 &       0.08 \\
+      & 1000 & 10000 &       1.00 &       0.11 &       0.21 &       0.11 \\
+      &       & 2000 &       1.00 &       0.12 &       0.21 &       0.12 \\
+      &       & 5000 &       1.00 &       0.08 &       0.15 &       0.08 \\
+      & 	  &		 &            &            &            &            \\
+ ...  &  ...  & ...  &   ...      &   ...      &   ...      &   ...      \\
+      & 	  &		 &            &            &            &            \\
+0.1 & 0.001 & 10000 &       1.00 &       0.11 &       0.20 &       0.11 \\
+      &       & 2000 &       0.94 &       0.17 &       0.29 &       0.49 \\
+      &       & 5000 &       0.93 &       0.18 &       0.29 &       0.50 \\
+      & 0.01 & 10000 &       0.93 &       0.17 &       0.29 &       0.49 \\
+      &       & 2000 &       0.82 &       0.23 &       0.36 &       0.68 \\
+      &       & 5000 &       0.82 &       0.24 &       0.36 &       0.68 \\
+      & 0.1 & 10000 &       0.82 &       0.24 &       0.36 &       0.68 \\
+      &       & 2000 &       0.66 &       0.33 &       0.44 &       0.82 \\
+      &       & 5000 &       0.62 &       0.32 &       0.42 &       0.81 \\
+      & 1 & 10000 &       0.66 &       0.33 &       0.44 &       0.82 \\
+      &       & 2000 &       1.00 &       0.12 &       0.21 &       0.12 \\
+      &       & 5000 &       0.00 &       0.02 &       0.00 &       0.85 \\
+      & 10 & 10000 &       1.00 &       0.10 &       0.18 &       0.10 \\
+      &       & 2000 &       1.00 &       0.10 &       0.19 &       0.10 \\
+      &       & 5000 &       1.00 &       0.15 &       0.26 &       0.15 \\
+      & 100 & 10000 &       1.00 &       0.11 &       0.19 &       0.11 \\
+      &       & 2000 &       1.00 &       0.10 &       0.18 &       0.10 \\
+      &       & 5000 &       1.00 &       0.15 &       0.26 &       0.15 \\
+      & 1000 & 10000 &       1.00 &       0.11 &       0.20 &       0.11 \\
+      &       & 2000 &       1.00 &       0.11 &       0.20 &       0.11 \\
+      &       & 5000 &       1.00 &       0.15 &       0.26 &       0.15 \\
+0.2 & 0.001 & 10000 &       1.00 &       0.10 &       0.17 &       0.10 \\
+      &       & 2000 &       0.91 &       0.19 &       0.31 &       0.54 \\
+      &       & 5000 &       0.91 &       0.19 &       0.31 &       0.54 \\
+      & 0.01 & 10000 &       0.92 &       0.18 &       0.30 &       0.54 \\
+      &       & 2000 &       0.81 &       0.24 &       0.37 &       0.69 \\
+      &       & 5000 &       0.81 &       0.25 &       0.38 &       0.70 \\
+      & 0.1 & 10000 &       0.81 &       0.24 &       0.37 &       0.70 \\
+      &       & 2000 &       0.67 &       0.34 &       0.45 &       0.82 \\
+      &       & 5000 &       0.67 &       0.34 &       0.45 &       0.82 \\
+      & 1 & 10000 &       0.66 &       0.34 &       0.44 &       0.82 \\
+      &       & 2000 &       0.02 &       0.58 &       0.05 &       0.89 \\
+      &       & 5000 &       0.03 &       0.60 &       0.05 &       0.89 \\
+0.5 & 0.001 & 10000 &       0.02 &       0.65 &       0.04 &       0.89 \\
+      &       & 2000 &       0.90 &       0.20 &       0.32 &       0.58 \\
+      &       & 5000 &       0.90 &       0.20 &       0.32 &       0.58 \\
+      & 0.01 & 10000 &       0.89 &       0.20 &       0.32 &       0.58 \\
+      &       & 2000 &       0.78 &       0.26 &       0.39 &       0.73 \\
+      &       & 5000 &       0.79 &       0.27 &       0.39 &       0.73 \\
+      & 0.1 & 10000 &       0.78 &       0.26 &       0.39 &       0.73 \\
+      &       & 2000 &       0.63 &       0.37 &       0.46 &       0.85 \\
+      &       & 5000 &       0.63 &       0.37 &       0.46 &       0.85 \\
+      & 1 & 10000 &       0.64 &       0.38 &       0.47 &       0.85 \\
+      &       & 2000 &       0.00 &       0.79 &       0.00 &       0.88 \\
+      &       & 5000 &       0.00 &       0.93 &       0.00 &       0.88 \\
+1 & 0.001 & 10000 &       0.00 &       0.87 &       0.00 &       0.88 \\
+      &       & 2000 &       0.89 &       0.20 &       0.33 &       0.60 \\
+      &       & 5000 &       0.89 &       0.21 &       0.33 &       0.60 \\
+      & 0.01 & 10000 &       0.89 &       0.20 &       0.33 &       0.60 \\
+      &       & 2000 &       0.77 &       0.28 &       0.41 &       0.76 \\
+      &       & 5000 &       0.75 &       0.29 &       0.41 &       0.77 \\
+      & 0.1 & 10000 &       0.77 &       0.29 &       0.41 &       0.76 \\
+      &       & 2000 &       0.58 &       0.42 &       0.48 &       0.87 \\
+      &       & 5000 &       0.35 &       0.52 &       0.41 &       0.90 \\
+      & 1 & 10000 &       0.58 &       0.42 &       0.48 &       0.87 \\
+      &       & 5000 &       0.00 &       0.98 &       0.00 &       0.88 \\
+ \bottomrule
+\end{tabular}     
+\begin{tabular}{|lllrrrr|}
+\toprule
+   c   &   gamma    &  n\_samples     &  Precision &     Recall &         F1 &   Accuracy \\
+\midrule
+
+10 & 0.001 & 10000 &       0.00 &       0.91 &       0.00 &       0.88 \\
+      &       & 2000 &       0.83 &       0.23 &       0.36 &       0.68 \\
+      &       & 5000 &       0.83 &       0.24 &       0.36 &       0.68 \\
+      & 0.01 & 10000 &       0.84 &       0.24 &       0.37 &       0.68 \\
+      &       & 2000 &       0.67 &       0.36 &       0.46 &       0.83 \\
+      &       & 5000 &       0.55 &       0.37 &       0.44 &       0.85 \\
+      & 0.1 & 10000 &       0.67 &       0.36 &       0.47 &       0.84 \\
+      &       & 2000 &       0.44 &       0.52 &       0.47 &       0.90 \\
+      &       & 5000 &       0.21 &       0.64 &       0.31 &       0.90 \\
+      & 1 & 10000 &       0.43 &       0.51 &       0.46 &       0.90 \\
+      &       & 5000 &       0.00 &       0.92 &       0.00 &       0.88 \\
+100 & 0.001 & 10000 &       0.00 &       0.90 &       0.00 &       0.89 \\
+      &       & 2000 &       0.78 &       0.28 &       0.41 &       0.76 \\
+      &       & 5000 &       0.75 &       0.26 &       0.39 &       0.75 \\
+      & 0.01 & 10000 &       0.77 &       0.28 &       0.41 &       0.76 \\
+      &       & 2000 &       0.58 &       0.41 &       0.47 &       0.86 \\
+      &       & 5000 &       0.35 &       0.48 &       0.39 &       0.89 \\
+      & 0.1 & 10000 &       0.57 &       0.40 &       0.47 &       0.86 \\
+      &       & 2000 &       0.43 &       0.51 &       0.46 &       0.90 \\
+      &       & 5000 &       0.21 &       0.65 &       0.30 &       0.90 \\
+      & 1 & 10000 &       0.44 &       0.51 &       0.46 &       0.90 \\
+      &       & 5000 &       0.00 &       0.97 &       0.00 &       0.88 \\
+1000 & 0.001 & 10000 &       0.00 &       0.81 &       0.00 &       0.89 \\
+      &       & 2000 &       0.70 &       0.33 &       0.45 &       0.81 \\
+      &       & 5000 &       0.56 &       0.33 &       0.41 &       0.83 \\
+      & 0.01 & 10000 &       0.69 &       0.33 &       0.44 &       0.81 \\
+      &       & 2000 &       0.49 &       0.43 &       0.45 &       0.88 \\
+      &       & 5000 &       0.27 &       0.49 &       0.34 &       0.89 \\
+      & 0.1 & 10000 &       0.49 &       0.43 &       0.46 &       0.88 \\
+      &       & 2000 &       0.42 &       0.50 &       0.45 &       0.89 \\
+      &       & 5000 &       0.22 &       0.66 &       0.31 &       0.90 \\
+      & 1 & 10000 &       0.43 &       0.51 &       0.46 &       0.90 \\
+      &       & 5000 &       0.00 &       0.96 &       0.00 &       0.88 \\
+\textcolor{red}{2} & 0.001 & 10000 &       0.00 &       0.93 &       0.00 &       0.88 \\
+      &       & 2000 &       0.87 &       0.21 &       0.34 &       0.62 \\
+      &       & 5000 &       0.88 &       0.21 &       0.34 &       0.63 \\
+      & 0.01 & 10000 &       0.87 &       0.21 &       0.34 &       0.63 \\
+      &       & 2000 &       0.74 &       0.31 &       0.43 &       0.79 \\
+      &       & 5000 &       0.74 &       0.31 &       0.44 &       0.80 \\
+      & \textcolor{red}{0.1} & 10000 &       0.74 &       0.31 &       0.43 &       0.79 \\
+      &       & 2000 &       0.51 &       0.46 &       0.48 &       0.89 \\
+      &       & \textcolor{red}{5000} &       \textcolor{red}{0.52} &       \textcolor{red}{0.47} &       \textcolor{red}{0.49} &        \textcolor{red}{0.89} \\
+      & 1 & 10000 &       0.51 &       0.46 &       0.48 &       0.89 \\
+      &       & 2000 &       0.00 &       0.97 &       0.00 &       0.88 \\
+      &       & 5000 &       0.00 &       0.88 &       0.00 &       0.88 \\
+20 & 0.001 & 10000 &       0.00 &       0.99 &       0.00 &       0.88 \\
+      &       & 2000 &       0.82 &       0.25 &       0.37 &       0.70 \\
+      &       & 5000 &       0.82 &       0.25 &       0.38 &       0.71 \\
+      & 0.01 & 10000 &       0.82 &       0.25 &       0.38 &       0.70 \\
+      &       & 2000 &       0.64 &       0.37 &       0.47 &       0.84 \\
+      &       & 5000 &       0.64 &       0.38 &       0.47 &       0.85 \\
+      & 0.1 & 10000 &       0.64 &       0.38 &       0.47 &       0.85 \\
+      &       & 2000 &       0.44 &       0.51 &       0.47 &       0.90 \\
+      &       & 5000 &       0.43 &       0.52 &       0.46 &       0.90 \\
+      & 1 & 10000 &       0.43 &       0.51 &       0.46 &       0.90 \\
+      &       & 2000 &       0.00 &       0.94 &       0.00 &       0.88 \\
+      &       & 5000 &       0.00 &       0.86 &       0.00 &       0.88 \\
+200 & 0.001 & 10000 &       0.00 &       0.99 &       0.00 &       0.88 \\
+      &       & 2000 &       0.76 &       0.31 &       0.43 &       0.78 \\
+      &       & 5000 &       0.75 &       0.30 &       0.43 &       0.78 \\
+      & 0.01 & 10000 &       0.75 &       0.30 &       0.42 &       0.78 \\
+      &       & 2000 &       0.54 &       0.42 &       0.47 &       0.87 \\
+      &       & 5000 &       0.53 &       0.41 &       0.46 &       0.87 \\
+      & 0.1 & 10000 &       0.54 &       0.41 &       0.46 &       0.87 \\
+      &       & 2000 &       0.43 &       0.51 &       0.46 &       0.90 \\
+      &       & 5000 &       0.44 &       0.51 &       0.47 &       0.90 \\
+      & 1 & 10000 &       0.43 &       0.50 &       0.45 &       0.89 \\
+      &       & 2000 &       0.00 &       0.86 &       0.00 &       0.88 \\
+      &       & 5000 &       0.00 &       0.91 &       0.00 &       0.88 \\
+2000 & 0.001 & 10000 &       0.00 &       0.78 &       0.00 &       0.88 \\
+      &       & 2000 &       0.66 &       0.34 &       0.45 &       0.82 \\
+      &       & 5000 &       0.68 &       0.35 &       0.46 &       0.83 \\
+      & 0.01 & 10000 &       0.68 &       0.34 &       0.45 &       0.82 \\
+      &       & 2000 &       0.47 &       0.43 &       0.44 &       0.87 \\
+      &       & 5000 &       0.48 &       0.44 &       0.45 &       0.88 \\
+      & 0.1 & 10000 &       0.48 &       0.43 &       0.45 &       0.88 \\
+      &       & 2000 &       0.44 &       0.52 &       0.47 &       0.90 \\
+      &       & 5000 &       0.44 &       0.51 &       0.47 &       0.90 \\
+      & 1 & 10000 &       0.43 &       0.51 &       0.46 &       0.90 \\
+      &       & 2000 &       0.00 &       0.89 &       0.00 &       0.87 \\
+      &       & 5000 &       0.00 &       0.82 &       0.00 &       0.88 \\
+      & 	  &		 &            &            &            &            \\
+ ...  &  ...  & ...  &   ...      &   ...      &   ...      &   ...      \\
+      & 	  &		 &            &            &            &            \\
+\bottomrule
+\end{tabular}
+\end{scriptsize}
+\end{multicols}
+\caption{Performance estimated for the RBF kernel SVM by cross validation (10-fold)}
+\label{Cross_val: SVM}
+\end{table}
+\restoregeometry
 \newpage
 
 %\bibliographystyle{unsrt}%Used BibTeX style is unsrt
 \bibliographystyle{plainnat}
-\bibliography{biblio.bib,biblio2.bib}
+\bibliography{biblio.bib}
 
 
 
