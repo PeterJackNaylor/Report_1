@@ -377,7 +377,7 @@ histopathology slides. On the long run, such a
  medical imaging such as 3D MRI scans. 
  
 
-\subsection{PhD subject: objectives}
+\subsection{PhD subject: objectives and strategy}
 
 This  PhD  project aims at developing the tools to take advantage of
 the morphological and spatial information at the cellular and tissular
@@ -387,47 +387,101 @@ scale from histopathology data.
 %phenotypic information at the cellular and tissular scale into a
 %bioinformatics workflow. 
 
-The basic workflow is shown in Figure \ref{workflow1}
+The basic workflow is shown in Figure \ref{workflow1}. Tissue samples
+are taken from the breast prior to surgery. In parallel, slides are
+prepared and the tissue is profiled in terms of gene expression and /
+or sequencing. From the workflow, we aim at extracting physiologically
+relevant features, which can then be used (optionally in combination with
+expression and mutational data) to predict either the molecular
+cancer subtype or the prognosis for the patient. 
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=\textwidth]{Workflow.png}
+\includegraphics[width=\textwidth]{Workflow_overview.png}
 \caption{Workflow}
 \label{workflow1}
 \end{figure}
 
-
-Acquiring phenotypic information requires
-segmentation methods that are easily adaptable to new data
-sets. 
-
-Identifying different segmented objects within the image follows
-naturally, objects worth detection are cells with their phenotypic
-categories (cellular level), or detecting metastasis regions (whole
-slide level). 
-
-On top of this, we can derive original features
-describing the spatial distributions of all of these classes. 
+The main focus of this PhD thesis will be the extraction of
+physiologically relevant features at the cellular and tissue
+level. Regarding the {\em cellular level}, I will focus on nuclear morphologies,
+because (1) nuclei are indicative of many cellular
+phenotypes\citep{Chow2012} and (2) their morphology is currently used by
+pathologists in order to identify the mitotic index and the level of
+nuclear pleomorphism\citep{Elston1991}. In order to derive information
+at the cellular level, nuclei must first be identified by automatic
+segmentation. Second, each of the segmented nuclei can be described
+with respect to texture, color and shape in order to assign a cell
+type to each of the nuclei (such as epithelial cell, stromal cell or
+lymphocyte) by a supervised learning approach (using SVM or Random
+Forests). Some of the features will also be exported directly, as they
+are themselves physiologically relevant (such as cell size). 
+Regarding the {\em tissue level}, the plan is to detect the tumor,
+stromal and necrotic regions (regions containing mostly dead
+cells). The tissue level features I will consider, are on the one hand
+region based features, calculated on the regions, and on the other
+hand features calculated from the cell populations (such as cell type
+percentages, and features describing the level of organization, such
+as Ripley's K), stratified by the regions in which the cells are situated. 
+In both cases, segmentation will be probably a bottleneck, and I am
+particularly interested by methods that are easily adaptable to new
+data sets and new segmentation tasks.
 
 \paragraph{Data sets}
 
-To
-quantify the relevance of our method we will to apply  our methods to
+I will apply these methods to
 two datasets: (1) 208 slides from an unpublished study on breast
 cancer, a special type of very aggressive breast cancer  and (2) 198
 slides from a recently published study on bladder cancer
-\citep{biton2014independent}. In these two applications we are
-investigating the phenotypic implications of the molecularly defined
-subgroups and the predictability of treatment response by automatic
-analysis of histopathology data.  We hope to identify links between
+\citep{biton2014independent}. In the first data set, I will be able to
+study the predictability of treatment response by automatic
+analysis of histopathology data. The second data set will be
+informative about how the histopathology features correlate with the
+molecularly defined subgroups. Indeed, I hope to identify links between
 cellular phenotypes, transcriptomic and grading data that will feed
-future projects in this field with interesting hypotheses. All of the
-methods developed in this project will be made publicly available to
-the scientific community by integrating them into the open source
-software CellCognition (\url{http://www.cellcognition.org}). For the
-moment, I have only had access to dataset (1). 
+future projects in this field with interesting hypotheses. 
+
+%All of the
+%methods developed in this project will be made publicly available to
+%the scientific community by integrating them into the open source
+%software CellCognition (\url{http://www.cellcognition.org}). For the
+%moment, I have only had access to dataset (1). 
 
 \paragraph{Main difficulties}
+
+Histopathology data is challenging at different levels, and much of
+the time during these first months was dedicated to solving technical
+issues related to these data: 
+\begin{enumerate}
+\item {\em Data size of individual slides}: each individual slide is
+  of large size (typically more than $50 GB$ of uncompressed data),
+  such that they cannot be loaded in the memory of a normal PC. 
+\item {\em Data size of data sets}: given that the data sets typically
+  consist in hundreds of slides, the entire data sets are very large,
+  and strategy for parallel computing must be explored. 
+\item {\em Stain variation}: there is a lot of variability in terms of
+  color between different slides. Several co-variates contribute to
+  these variations, such as the scanner type, the stain supplier and
+  the stain quality, differences in slide preparation and tissue
+  type. 
+\item {\em Variability in the objects}: another variability we have to
+  cope come from the biological variability between cells and other
+  tissue components. 
+\item {\em Low contrast and heterogeneous texture}: sometimes, the contrast of the objects is
+  relatively low, and intensity of objects might not be homogeneous,
+  such that simple segmentation strategies easily fail. 
+\item {\em Projection artefacts}: as we consider a 2D slice of a three
+  dimensional probe, there are sometimes overlapping cells / nuclei
+  and other artefacts that would prevent us from properly resolving
+  single objects.  
+\item {\em No explicit formalization of information}: often there are
+  no clear descriptions of the objects we are trying to identify, or
+  rules that could easily be formulated as a mathematical algorithm.  
+\end{enumerate}
+
+I will show in the following how these difficulties are addressed in
+the literature and partly by the first methods I have started to
+develop. 
 
 \subsection{Related work}
 
