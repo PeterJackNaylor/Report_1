@@ -237,8 +237,7 @@ of the genome, where single cells acquire mutations and other genomic
 modifications leading to
 specific and essential alterations of the cellular and tissular
 phenotypes, that ultimately lead to tumor formation and metastasis
-(*** je t'ajoute des citations, mais si tu veux les enlever, pas de
-problemes ***) \citep{Hanahan2000,Hanahan2011}. 
+\citep{Hanahan2000,Hanahan2011}. 
 
 % Standards in cancer research today
 The advent of next generation sequencing technologies has
@@ -484,8 +483,7 @@ I will show in the following how these difficulties are addressed in
 the literature and partly by the first methods I have started to
 develop. 
 
-\subsection*{Context and related work}
-
+\subsection{Related work}
 
 Extracting biological features from image data is a difficult task as one must be able to identify entities within histopathology slides. Image segmentation and object recognition in medical imagining have been tackled for many years and many approaches have been found. Raw feature extraction via morphological operators is a classical method as it enables a user to manually define what type of information he wishes to extract \citep{irshad2014methods}. Segmentation methods based on a strong priori information are also possible and yield comparable results, in \citet{ranefall2016fast} they use segment the picture using a ellispe fit, however the method in \citep{ranefall2016fast} is considerably faster. Graph-based tools for segmentation are also possible in histopathology \citep{ta2009graph}. \citet{manivannanlocal} focus on gland segmentation, they achieve good results by predicting image patches as a whole, via a classification scheme. The output confidence vector is then preprocessed to obtain the final segmentation. Alternative methods have arose from the achieving Convolutional neural networks \citep{lecun}, in particular strong incentive rose with the very impressive results that they achieved in the pascal voc challenge with \citet{ImageNet}. Recent advances in deep neural network, and in particular in their optimization have made them become the state-of-the-art model for object recognition. 
 %Convolutional neural networks were the first neural network in computer vision and succeed in becoming a benchmark for the MNIST data set \citep{lecun}, 
@@ -708,13 +706,6 @@ The conference was held in Prague and I also attended a tutorial on deep neural 
 
 \section{May 2016 and future work}
 From May to now, my main focus has returned to the datasets provided by the collaborations involved in this PhD. In particular I had to acquire the data set from F. Reyal. The work pipeline for this project is pictured in \ref{workflow1}. The pipeline can be divided in three parts: computer vision in order to extract encoded information from the raw images. The second is feature extraction on two levels, the biological image data driven features and the extraction of the other data type. This data type can be molecular driven, transcriptomic, another type of image data. The final part of this project will then be to derive a statistical model in order to find correlations between the different types of data, improve prognosis prediction and overall try to better quantify and understand cancer progression. I will only discuss part one as it is the one I am currently at.
-
-\begin{figure}[!ht]
-\centering
-\includegraphics[width=\textwidth]{Workflow.png}
-\caption{Workflow}
-\label{workflow1}
-\end{figure}
 
 
 \subsection{Data}
