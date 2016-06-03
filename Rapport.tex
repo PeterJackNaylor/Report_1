@@ -1,3 +1,4 @@
+
 \documentclass[a4paper,10pt]{article}
 \usepackage[utf8]{inputenc}
 %\usepackage[francais]{babel}
@@ -211,18 +212,277 @@ Towards image-based cancer signatures from histopathology data
 
 \section{Introduction}
 
-%Many interesting fields of application have emerged from computer vision and machine learning, a very import one deals with cancer related topics and in particular histopathology.
- Cancer diagnosis involves complex interpretation of a multitude of heterogeneous data, such as genomic, transcriptomic and image data. The image data used in this context corresponds to thin slices of the tumor and of the surrounding tissue, stained with agents in order to highlight specific structures, such as cell nuclei or collagen. The image data is what we call histopathology image data.
-A medical practitioner will routinely check the patients histopathology image data in order to decide the next step in the patient's treatment. Histopathology slides can thus be very informative of the cancer subtype and/or of how the patient's immune system is reacting to the cancer. Adding relevant information extracted from histopathology slides will help make better prognosis for cancer treatment and in particular, help better understand cancer process. 
+In this report, I will give a chronological assessment of my work starting by
+ January 2016. My PhD officially started in November, but I took
+ two extra months to finish my master's project that is now currently
+ on hold. 
 
- We wish to build appropriate tools to quantify the huge amount of data found in histopathology slides. On the long run, such a quantification scheme would fit in a work pipeline that would investigate the most informative physiological features and the links to genomic, transcriptomic features and even possibly different medical imaging such as 3D MRI scans.
+My master project was also in the field of machine
+ learning and computer vision in the biomedical field, however it was not applied to
+ histopathology data but to time-lapse fluorescent microscopy
+ data in the context of High Content Screening. The results I 
+ obtained in my master thesis were indeed very promising, and triggered
+ a series of new experiments, performed at the EMBL Heidelberg. It is
+ relatively likely that this work will result in a
+ publication. Nevertheless, I decided to not include this side project
+ in my first years report.
+
+
+\subsection{Context}
+% What is cancer?
+Cancer is one of the most frequent deadly diseases in the world. In
+2012, 14.1 million adults in the world were diagnosed with cancer and
+8.2 million cancer deaths were reported worldwide. Cancer is a disease
+of the genome, where single cells acquire mutations and other genomic
+modifications leading to
+specific and essential alterations of the cellular and tissular
+phenotypes, that ultimately lead to tumor formation and metastasis
+(*** je t'ajoute des citations, mais si tu veux les enlever, pas de
+problemes ***) \citep{Hanahan2000,Hanahan2011}. 
+
+% Standards in cancer research today
+The advent of next generation sequencing technologies has
+revolutionized cancer research. In a coordinated effort undertaken by
+a large number of research institutions worldwide, thousands of cancer
+genomes have been sequenced. In-depth analysis of such data sets has
+allowed for example the identification of many driver mutations
+(mutations that are causally linked to tumorigenesis) and the
+definition of clinically relevant subtypes \citep{Hudson2010}. Indeed,
+many studies have shown that cancer is a profoundly heterogeneous
+disease. Consequently, one of the most promising strategies for
+finding new and more efficient cancer treatments is to
+tailor the treatment to patient and tumor specific genomic
+features. For this reason, one of the major goals in today’s cancer
+research is to build robust and accurate predictive models in order to
+characterize each tumor in terms of molecular subtype and prognostic
+features and ultimately to predict the optimal therapeutic choice. 
+
+% Use of histopathology data in clinical practice 
+Yet, while massive sequencing approaches and the analysis of genomic,
+epigenomic and transcriptomic features build the main body of current
+bioinformatics programs related to cancer, diagnosis and prognosis in
+clinical practice are not solely based on sequence and gene expression
+data. Indeed, histopathology data (see Figure
+\ref{fig:example_histopath}) is routinely used in clinical
+practice for cancer diagnosis and prognosis. These data  correspond to
+thin slices of the tumor and of the surrounding tissue, stained with
+agents in order to highlight specific structures, such as cell nuclei
+or collagen. A medical practitioner will routinely check the patients
+histopathology image data in order to decide the next step in the
+patient's treatment. Histopathology slides can thus be very
+informative of the cancer subtype and/or of how the patient's immune
+system is reacting to the cancer. However, the interpretation of such
+data is not necessarily straightforward. Indeed, it requires a lot of
+special training and a deep understanding of the underlying physiology
+to interpret such data. Moreover, while some criteria are clearly
+defined, there is also some fuziness in the interpretaion of
+histopathology data in a sense that there are not clear and
+quantitative rules for all aspects of the interpretation. 
+
+
+% type of information
+In contrast to genomic or transcriptomic
+profiling, histopathology assesses phenotypic information at both the
+cellular and the tissue level. Typical features are the mitotic index
+(number of observed cell divisions), the size distribution and spatial
+organization of cells depending on their cell type, 
+or the quantity of dead cells in cancer and surrounding tissue. The
+nature of this type of information is very different from what can be
+obtained from genomic or transcriptomic profiling : indeed, it is
+informative about cellular and tissular phenotypes, including thus a
+spatial and a a morphological dimension.  Both of these dimensions are
+typically absent in sequence based data. Thus,
+stained tumor sections do not only contain useful information for
+cancer prognosis and treatment decisions used in clinical practice
+since years, but the information is also
+to a large extend complementary to molecular features of tumors. 
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[height=4cm]{histo1.png}
+  \caption{}
+  \label{fig:sub1}
+\end{subfigure}%
+~
+\begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[height=4cm]{histo2.png}
+  \caption{}
+  \label{ProbabilityMapLocalMaxima}
+\end{subfigure}
+~
+\begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[height=4cm]{histo3.png}
+  \caption{}
+\end{subfigure}
+\caption{Tissue sections with standard Haematoxylin and Eosin staining.}
+\label{fig:example_histopath}
+\end{figure}
+
+% so far this information is unexploited quantitatively. 
+Yet, histopathology data is still largely unexploited in a systematic and
+quantitative way. There are several reasons for this: 
+\begin{enumerate}
+\item With the
+availability of comprehensive genome, transcriptome and epigenome data
+sets, the hope was that these data could explain many aspects of life
+and virtually all aspects of diseases which are known to be related to
+the genome. Today, we understand that it is necessary the spatial and
+morphological dimensions in the reasoning. 
+\item Digital pathology,
+has only recently become a standard in the field. Still a few years
+ago, the standard
+procedure was to examine the slides on the
+microscope. 
+\item The information
+contained in histopathology data has never been fully
+formalized. While some quantitative (yet manually determined) criteria
+exist, this is not true for the overall interpretation of the slides
+which remains subjective and difficult to model formally. 
+\item There are many technical and methodological challenges related
+  to the automatic analysis of histopathology data which made fully
+  automated analysis of these images unfeasible. 
+\end{enumerate}
+
+%Many interesting fields of application have emerged from computer
+%vision and machine learning, a very import one deals with cancer
+%related topics and in particular histopathology. 
+% Cancer diagnosis involves complex interpretation of a multitude of
+% heterogeneous data, such as genomic, transcriptomic and image
+% data. The image data used in this context corresponds to thin slices
+% of the tumor and of the surrounding tissue, stained with agents in
+% order to highlight specific structures, such as cell nuclei or
+% collagen. The image data is what we call histopathology image data. 
+%
+%A medical practitioner will routinely check the patients
+%histopathology image data in order to decide the next step in the
+%patient's treatment. Histopathology slides can thus be very
+%informative of the cancer subtype and/or of how the patient's immune
+%system is reacting to the cancer. 
+%
+%Adding relevant information
+%extracted from histopathology slides will help make better prognosis
+%for cancer treatment and in particular, help better understand cancer
+%process.  
+
+In this PhD thesis, I want to contribute to the generation of the
+appropriate tools to quantify the huge amount of data found in
+histopathology slides. On the long run, such a
+ quantification scheme would fit in a work pipeline that would
+ investigate the most informative physiological features at the
+ cellular and the tissue level and the links
+ to genomic, transcriptomic features and even possibly different
+ medical imaging such as 3D MRI scans. 
  
- I will give a chronological assessment of my work starting by January, even though I officially started my PhD in November, I took two extra months to finish my master's project that is now currently on hold. This master project was also in the field of machine learning and computer vision, however it was not applied to histopathology data but to live imaging of fluorescent microscopic data. 
 
+\subsection{PhD subject: objectives and strategy}
 
-\subsection*{PhD subject}
+This  PhD  project aims at developing the tools to take advantage of
+the morphological and spatial information at the cellular and tissular
+scale from histopathology data. 
 
-This  PhD  project is a first step in integrating morphological and phenotypic information at the cellular and tissular scale into a bioinformatics workflow. Acquiring phenotypic information requires segmentation methods that our easily adaptable to new data sets. Identifying different segmented objects within the image follows naturally, objects worth detection are cells with their phenotypic categories (cellular level), or detecting metastasis regions (whole slide level). On top of this, we can derive original features describing the spatial distributions of all of these classes. To quantify the relevance of our method we will to apply  our methods to two datasets: (1) 208 slides from an unpublished study on breast cancer, a special type of very aggressive breast cancer  and (2) 198 slides from a recently published study on bladder cancer \citep{biton2014independent}. In these two applications we are investigating the phenotypic implications of the molecularly defined subgroups and the predictability of treatment response by automatic analysis of histopathology data.  We hope to identify links between cellular phenotypes, transcriptomic and grading data that will feed future projects in this field with interesting hypotheses. All of the methods developed in this project will be made publicly available to the scientific community by integrating them into the open source software CellCognition (\url{http://www.cellcognition.org}). For the moment, I have only had access to dataset (1).
+%is a first step in integrating morphological and
+%phenotypic information at the cellular and tissular scale into a
+%bioinformatics workflow. 
+
+The basic workflow is shown in Figure \ref{workflow1}. Tissue samples
+are taken from the breast prior to surgery. In parallel, slides are
+prepared and the tissue is profiled in terms of gene expression and /
+or sequencing. From the workflow, we aim at extracting physiologically
+relevant features, which can then be used (optionally in combination with
+expression and mutational data) to predict either the molecular
+cancer subtype or the prognosis for the patient. 
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{Workflow_overview.png}
+\caption{Workflow}
+\label{workflow1}
+\end{figure}
+
+The main focus of this PhD thesis will be the extraction of
+physiologically relevant features at the cellular and tissue
+level. Regarding the {\em cellular level}, I will focus on nuclear morphologies,
+because (1) nuclei are indicative of many cellular
+phenotypes\citep{Chow2012} and (2) their morphology is currently used by
+pathologists in order to identify the mitotic index and the level of
+nuclear pleomorphism\citep{Elston1991}. In order to derive information
+at the cellular level, nuclei must first be identified by automatic
+segmentation. Second, each of the segmented nuclei can be described
+with respect to texture, color and shape in order to assign a cell
+type to each of the nuclei (such as epithelial cell, stromal cell or
+lymphocyte) by a supervised learning approach (using SVM or Random
+Forests). Some of the features will also be exported directly, as they
+are themselves physiologically relevant (such as cell size). 
+Regarding the {\em tissue level}, the plan is to detect the tumor,
+stromal and necrotic regions (regions containing mostly dead
+cells). The tissue level features I will consider, are on the one hand
+region based features, calculated on the regions, and on the other
+hand features calculated from the cell populations (such as cell type
+percentages, and features describing the level of organization, such
+as Ripley's K), stratified by the regions in which the cells are situated. 
+In both cases, segmentation will be probably a bottleneck, and I am
+particularly interested by methods that are easily adaptable to new
+data sets and new segmentation tasks.
+
+\paragraph{Data sets}
+
+I will apply these methods to
+two datasets: (1) 208 slides from an unpublished study on breast
+cancer, a special type of very aggressive breast cancer  and (2) 198
+slides from a recently published study on bladder cancer
+\citep{biton2014independent}. In the first data set, I will be able to
+study the predictability of treatment response by automatic
+analysis of histopathology data. The second data set will be
+informative about how the histopathology features correlate with the
+molecularly defined subgroups. Indeed, I hope to identify links between
+cellular phenotypes, transcriptomic and grading data that will feed
+future projects in this field with interesting hypotheses. 
+
+%All of the
+%methods developed in this project will be made publicly available to
+%the scientific community by integrating them into the open source
+%software CellCognition (\url{http://www.cellcognition.org}). For the
+%moment, I have only had access to dataset (1). 
+
+\paragraph{Main difficulties}
+
+Histopathology data is challenging at different levels, and much of
+the time during these first months was dedicated to solving technical
+issues related to these data: 
+\begin{enumerate}
+\item {\em Data size of individual slides}: each individual slide is
+  of large size (typically more than $50 GB$ of uncompressed data),
+  such that they cannot be loaded in the memory of a normal PC. 
+\item {\em Data size of data sets}: given that the data sets typically
+  consist in hundreds of slides, the entire data sets are very large,
+  and strategy for parallel computing must be explored. 
+\item {\em Stain variation}: there is a lot of variability in terms of
+  color between different slides. Several co-variates contribute to
+  these variations, such as the scanner type, the stain supplier and
+  the stain quality, differences in slide preparation and tissue
+  type. 
+\item {\em Variability in the objects}: another variability we have to
+  cope come from the biological variability between cells and other
+  tissue components. 
+\item {\em Low contrast and heterogeneous texture}: sometimes, the contrast of the objects is
+  relatively low, and intensity of objects might not be homogeneous,
+  such that simple segmentation strategies easily fail. 
+\item {\em Projection artefacts}: as we consider a 2D slice of a three
+  dimensional probe, there are sometimes overlapping cells / nuclei
+  and other artefacts that would prevent us from properly resolving
+  single objects.  
+\item {\em No explicit formalization of information}: often there are
+  no clear descriptions of the objects we are trying to identify, or
+  rules that could easily be formulated as a mathematical algorithm.  
+\end{enumerate}
+
+I will show in the following how these difficulties are addressed in
+the literature and partly by the first methods I have started to
+develop. 
 
 \subsection*{Context and related work}
 
@@ -240,11 +500,13 @@ Image-based biological features are studied and are emerging: \citet{yuan2012qua
 I started my PhD by focusing on a ISBI2016 challenge, this challenge was a very interesting introduction to my PhD as the data is similar to the ones I will be using. This challenge can be seen as a metastasis detection/localization problem. This challenge dealt with histopathological images acquired from breast tissue with a Philips scanner, the raw data was under a tiff format which is a special image format used for histopathological data. Participating in this challenge enabled me to have a first experience with histopathology data, to become familiar with classical computer vision approaches and finally allowed me to use strong computational resources, via a cluster of computers. However, this challenge did not involve any crossing between heterogeneous types of data such as those describe in the earlier paragraphs. Participating in this challenge was a first opportunity for me to tackle a metastasis detection challenge with a huge amount of segmentation annotation, which is fairly rare.
 %\section{November 2015 - January 2016: MitoCheck Project}
 
-\section{January 2016 - April 2016: Camelyon2016 challenge}
+\section{January 2016 - April 2016: Camelyon2016}
 
 The Challenge was organized in conjunction with the support of the 2016 IEEE International Symposium on Biomedical Imaging  (ISBI-2016) and this is the first challenge using whole-slide images in histopathology. This challenge fitted particularly well with my PhD time table as the data used in this challenge is very similar to the data acquired by F. Reyal. 
 %However, our final ranking was not very satisfying as we did not achieve good results.
 This work was done with the help of V. Machairas, T. Walter and E. Decenciere. A website was made for the purpose of this challenge, \url{http://camelyon16.grand-challenge.org/home/}.
+\\
+However, we did not have the intent of submitting a competitive solution. As I had only started my PhD three months before the challenge's deadline, however we had other incentives: Camelyon2016 provided an amazing data set, over 500 Gygabytes of annotated histopathology image files. This data was fully annotated and segmented with respect to the metastasis regions. This dataset was of very high standard, which can be rare for such scales, this is the main reason for our entry, allowing me to have a toy annotated data set in order to gain a first experience with histopathology data and it's problematics. Having no initial experience with raw image data (the data in my masters project had already been extracted from the images) and no experience in computer cluster was maybe one of the hardest parts for me in this challenge. Dealing with the raw images implied learning how to use the openslide library, the image files were of a special type. Being able to use the cluster implied, learning bash script, cluster organisation, dealing with installation issues and overall, being very familiar with a command line.
 
 \subsection{Context}
 The goal of this challenge is to evaluate new and existing algorithms for automated detection of metatases in H\&E stained whole-slide images of lymph node sections, see figure \ref{LymphNode}. This task has a high clinical relevance but requires large amounts of reading time from pathologists. Therefore, a successful solution would hold great promise to reduce the workload of the pathologists while at the same time reduce the subjectivity in diagnosis. The Camelyon2016 challenge will focus on sentinel lymph nodes of breast cancer patients and 2 large datasets have been provided from both the Radboud University Medical Center (Nijmegen, the Netherlands), as well as the University Medical Center Utrecht (Utrecht, the Netherlands). The focus on lymph nodes of breast cancer patients is not arbitrary, lymph node metastases occur in most cancer types (e.g. breast, prostate, colon). Lymph nodes are small glands that filter lymph, the fluid that circulates through the lymphatic system. The lymph nodes in the underarm are the first place breast cancer is likely to spread. Metastatic involvement of lymph nodes is one of the most important prognostic variables in breast cancer. Prognosis is poorer when cancer has spread to the lymph nodes.
@@ -415,8 +677,8 @@ We can take a look at figure \ref{Detecting maxima} as an example of our metasta
 
 \subsubsection*{Different alternative}
 
-We presented our method for the slide-base evaluation, which consists of a pixel classification followed by a pre-processing step. We can by-pass the the pixel classification and the pre-processing by applying a different statistical model. Multiple Instance Learning (MIL) are very well suited in for this slide base evaluation. 
-In our case, MIL models will enable use to predict at the slide level with information at a pixel level. On the contrary to standard supervised learning, the algorithm receives a set of labelled bags instead of a set labelled instances. A bag is considered positive if and only if he contains at least one positive In our setting, each bag represents a slide and each instance is a pixel of this slide, for more details see \citep{maron1998multiple}. In pratice, the learning algorithms do not differ in their primal idea, for example a MIL SVM can be formulated as a soft-margin SVM with a extra constraint on the labelled bags: $\sum \frac{y_i+1}{2} \geqslant 1, \forall I \ s.t \ Y_I=1 \ \text{and} \ y_i=-1, \forall I \ s.t \ Y_I=-1$ where $y_i$ is the pixel label, $Y_I$ denotes the bag label and can denote or the label of bag $I$ or the set of pixel inside bag $I$, for more details \citep{andrews2002support}. Random forest can also be adapted to work in MIL framework \citep{leistner2010miforests}. However, due to lack of time we were not able to compare a MIL approach to a our pixel wise classification scheme.
+We presented our method for the slide-base evaluation, which consisted of a pixel classification followed by a pre-processing step. We can by-pass the pixel classification and the pre-processing by applying a different statistical model. Multiple Instance Learning (MIL) are very well suited for this slide base evaluation. 
+In our case, MIL models will enable us to predict at the slide level with information at a pixel level. On the contrary to standard supervised learning, the algorithm receives a set of labelled bags instead of a set labelled instances. A bag is considered positive if and only if he contains at least one positive In our setting, each bag represents a slide and each instance is a pixel of this slide, for more details see \citep{maron1998multiple}. In pratice, the learning algorithms do not differ in their primal idea, for example a MIL SVM can be formulated as a soft-margin SVM with a extra constraint on the labelled bags: $\sum \frac{y_i+1}{2} \geqslant 1, \forall I \ s.t \ Y_I=1 \ \text{and} \ y_i=-1, \forall I \ s.t \ Y_I=-1$ where $y_i$ is the pixel label, $Y_I$ denotes the bag label and can denote or the label of bag $I$ or the set of pixel inside bag $I$, for more details \citep{andrews2002support}. Random forest can also be adapted to work in MIL framework \citep{leistner2010miforests}. However, due to lack of time we were not able to compare a MIL approach to a our pixel wise classification scheme.
 
 
 
