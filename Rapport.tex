@@ -329,7 +329,7 @@ quantitative way. There are several reasons for this:
 availability of comprehensive genome, transcriptome and epigenome data
 sets, the hope was that these data could explain many aspects of life
 and virtually all aspects of diseases which are known to be related to
-the genome. Today, we understand that it is necessary the spatial and
+the genome. Today, we understand that it is necessary to include the spatial and
 morphological dimensions in the reasoning. 
 \item Digital pathology,
 has only recently become a standard in the field. Still a few years
@@ -339,7 +339,7 @@ microscope.
 \item The information
 contained in histopathology data has never been fully
 formalized. While some quantitative (yet manually determined) criteria
-exist, this is not true for the overall interpretation of the slides
+exist, this is not true for the overall interpretation of slides
 which remains subjective and difficult to model formally. 
 \item There are many technical and methodological challenges related
   to the automatic analysis of histopathology data which made fully
@@ -485,27 +485,89 @@ develop.
 
 \subsection{Related work}
 
-Extracting biological features from image data is a difficult task as one must be able to identify entities within histopathology slides. Image segmentation and object recognition in medical imagining have been tackled for many years and many approaches have been found. Raw feature extraction via morphological operators is a classical method as it enables a user to manually define what type of information he wishes to extract \citep{irshad2014methods}. Segmentation methods based on a strong priori information are also possible and yield comparable results, in \citet{ranefall2016fast} they use segment the picture using a ellispe fit, however the method in \citep{ranefall2016fast} is considerably faster. Graph-based tools for segmentation are also possible in histopathology \citep{ta2009graph}. \citet{manivannanlocal} focus on gland segmentation, they achieve good results by predicting image patches as a whole, via a classification scheme. The output confidence vector is then preprocessed to obtain the final segmentation. Alternative methods have arose from the achieving Convolutional neural networks \citep{lecun}, in particular strong incentive rose with the very impressive results that they achieved in the pascal voc challenge with \citet{ImageNet}. Recent advances in deep neural network, and in particular in their optimization have made them become the state-of-the-art model for object recognition. 
+Extracting biological features from image data is a difficult task as one must be able to identify entities within histopathology slides. Image segmentation and object recognition in medical imagining have been tackled for many years and many approaches have been found. Methods based on mathematical morphological operators have been widely used and applied for segmentation and feature extraction, however such methods rely on the user to manually define the information that is relevant for his task \citep{irshad2014methods}. Segmentation methods based on a strong priori information are also possible and yield comparable results in terms of accuracy, in \citet{ranefall2016fast} they segment the picture using a ellispe fit which is considerably faster than other state of the art methods. Graph-based tools for segmentation are also possible in histopathology \citep{ta2009graph}. \citet{manivannanlocal} focus on gland segmentation, they achieve good results by predicting image patches as a whole, via a classification scheme. The output confidence vector is then preprocessed to obtain the final segmentation. Alternative methods have arisen from the achieving Convolutional neural networks \citep{lecun}, in particular strong incentive rose with the very impressive results that they achieved in the pascal voc challenge with \citet{ImageNet}. Recent advances in deep neural network, and in particular in their optimization have made them become the state-of-the-art model for object recognition. 
 %Convolutional neural networks were the first neural network in computer vision and succeed in becoming a benchmark for the MNIST data set \citep{lecun}, 
 This trend has spread to other fields, we can think of semantic segmentation problems, where \citet{long2015fcn} use "de-convolution layers" and up-sampling in order to identify and precisely locate objects within a picture. We can also look at the game Go 
 %"Artificial Intelligence" in Go
-\citep{AlphaGo}. With this trend, people have naturally people applied deep learning models to medical imaging, as in \citet{UNet}. It seems unavoidable that I need to try and test deep neural networks, mainly for the segmentation of histopathology slides.
+\citep{AlphaGo}. With this trend, people have naturally applied deep learning models to medical imaging, as in \citet{UNet}. Applying deep convolutional network to histopathology image seems natural as it is the state of the art, \citet{xu2016deep} used deep network for the segmentation and classification of epithelial and stromal region within histopathological images..
 % The first part of this report, I tried applying classical methods with respect to the computer vision aspect. Such as manually creating features in order to recognize such and such aspect on the histopatholigical images.
 Other works have applied deep networks to histopathology, not for segmentation although: \citet{cirecsan2013mitosis} use convolutionnal neural network to detect cells undergoing mitotic events, \citet{jiajia2016automatic} pairs a convolutional neural network and manual biological driven features to grade histopathological tissue.
 
-Image-based biological features are studied and are emerging: \citet{yuan2012quantitative} segment nucleis in histological data to access information about lymphocyte counts, cancer cells counts and heat maps of spatial distribution in order to improve accuracy. They also use these biological driven features to correct statistical models based on molecular data, indeed they asses that these biological driven features quantify the heterogeneous cell populations that is a source of noise. Evaluating tumor heterogenity is an important aspect, in \citet{potts2012evaluating} they quantify cell heterogeneity in two ways, intratumoral, linked to the variability of cells within a tumor, and intertumoral which is linked to tumor heterogeneity within the whole tissue. They increase the accuracy of HER2 scoring by better quantifying the heterogeneity via features based on spatial distribution and local neighbourhoods. \citet{harder2016cooccurence} find relevant biological features that quantify the invasion of the tumor, in particular these features are based on spatial and neighbourhood analysis. In \citet{petushi2006large}, they show that we can extract relevant data from the images in order to create reproducible grading. Reproducibility of the grading is a key goal for computer aided diagnostics, indeed breast cancer grading and many others can be highly variable from one pathologist to another, even from one hospital to another. In a similar way, the staining protocols can be very different. Frequently, two stains such as hematoxylin and eosin (H\&E) are used to highlight the contrast between cell nuclei and cytoplasm. Moreover, staining concentration can vary among hospitals but the amount of staining used varies within slides from the same institute. \citet{deconvolution} deal with the issue of non-standardisation of slides by trying to estimate the contributions of each pure stain to the RGB channels. Estimating the contribution matrix can be refined and some achieve better performances \citep{alsubaie2016}. This method is stain specific, i.e for H\&E staining, we have the transformation matrix. \citet{niethammer2010appearance} take a different approach, to standardize appearances across slides, one has to process all the slides in order to find a common plane fit for H\&E staining. Others have extended this type of normalization to different types of staining \citep{vanEycke2016}. 
+Image-based biological features are studied and are emerging: In \citet{lee2015supervised}, they improve the prediction of recurrent prostate cancer via the integration of quantitative image features and protein expression. \citet{yuan2012quantitative} segment nuclei in histological data to access information about lymphocyte counts, cancer cells counts and heat maps of spatial distribution in order to model prediction.  They also use these biological driven features to correct statistical models based on molecular data, indeed they assess that these biologic driven features quantify the heterogeneous cell populations that is a source of noise. Evaluating tumor heterogenity is an important aspect, in \citet{potts2012evaluating} they quantify cell heterogeneity in two ways, intratumoral, linked to the variability of cells within a tumor, and intertumoral which is linked to tumor heterogeneity within the whole tissue. They increase the accuracy of HER2 scoring by better quantifying the heterogeneity via features based on spatial distribution and local neighbourhoods. \citet{harder2016cooccurence} find relevant biological features that quantify the invasion of the tumor, in particular these features are based on spatial and neighbourhood analysis. In \citet{petushi2006large}, they show that we can extract relevant data from the images in order to create reproducible grading. Reproducibility of the grading is a key goal for computer aided diagnostics, indeed breast cancer grading and many others can be highly variable from one pathologist to another, even from one hospital to another. In a similar way, the staining protocols can be very different. Frequently, two stains such as hematoxylin and eosin (H\&E) are used to highlight the contrast between cell nuclei and cytoplasm. Moreover, staining concentration can vary among hospitals but the amount of staining used varies within slides from the same institute. \citet{deconvolution} deal with the issue of non-standardisation of slides by trying to estimate the contributions of each pure stain to the RGB channels. Estimating the contribution matrix can be refined and some achieve better performances \citep{alsubaie2016}. This method is stain specific, i.e for each staining we have one predefinied transformation matrix. \citet{niethammer2010appearance} take a different approach, to standardize appearances across slides, one has to process all the slides in order to find a common plane fit for H\&E staining. Others have extended this type of normalization to different types of staining \citep{vanEycke2016}. 
 
-I started my PhD by focusing on a ISBI2016 challenge, this challenge was a very interesting introduction to my PhD as the data is similar to the ones I will be using. This challenge can be seen as a metastasis detection/localization problem. This challenge dealt with histopathological images acquired from breast tissue with a Philips scanner, the raw data was under a tiff format which is a special image format used for histopathological data. Participating in this challenge enabled me to have a first experience with histopathology data, to become familiar with classical computer vision approaches and finally allowed me to use strong computational resources, via a cluster of computers. However, this challenge did not involve any crossing between heterogeneous types of data such as those describe in the earlier paragraphs. Participating in this challenge was a first opportunity for me to tackle a metastasis detection challenge with a huge amount of segmentation annotation, which is fairly rare.
+%I started my PhD by focusing on the Camelyon2016 dataset. This dataset was very interesting as it is similar to the ones I will be using. The tissue samples were acquired from breast tissue with a Philips scanner. Tackling this segmentation problem was very interesting as it was my first opportunity to tackle a metastasis detection challenge with a huge amount of segmentation annotation, which is fairly rare.
+
 %\section{November 2015 - January 2016: MitoCheck Project}
 
-\section{January 2016 - April 2016: Camelyon2016}
+\section{Tissue segmentation}
+Segmentation is the first problem that I need to address. As
+mentioned, there are two main segmentation problems in this project:
+(1) segmentation of nuclei and (2) segmentation of tissue. While in a
+parallel project in our group, a nucleus segmentation algorithm has
+been already developed, we still have no working solution for tissue
+segmentation. I therefore wanted to address this problem first. 
 
-The Challenge was organized in conjunction with the support of the 2016 IEEE International Symposium on Biomedical Imaging  (ISBI-2016) and this is the first challenge using whole-slide images in histopathology. This challenge fitted particularly well with my PhD time table as the data used in this challenge is very similar to the data acquired by F. Reyal. 
+The fact that tissue characteristics are difficult to be modeled
+explicitly (i.e. the difficulty in determining the exact rules
+according to which a certain region would be labeled as one region or
+the other), suggested the use of supervised learning as a segmentation
+strategy, where we learn the rules from a set of annotated images. 
+
+This however also requires the existence of high quality annotation,
+which might be fairly time consuming to generate. While in principle,
+our collaborators are willing to perform such a work, we were looking
+for publicly available data sets that would allow us to start setting
+up our method. 
+
+We then discovered that there was such a data set, which was related
+to a recently released metastasis detection challenge. The Challenge was
+organized in conjunction with the support of the 2016 IEEE
+International Symposium on Biomedical Imaging  (ISBI-2016) and this is
+the first challenge using whole-slide images in histopathology. This
+challenge fitted particularly well with my PhD time table as the data
+used in this challenge is very similar to the data acquired by
+F. Reyal.  
+%I started my PhD by focusing on a ISBI2016 challenge, this challenge
+%was a very interesting introduction to my PhD as the data is similar
+%to the ones I will be using. 
+Concretely, this challenge can be seen as a
+metastasis detection/localization problem. The data were
+histopathological images acquired from breast tissue with a Philips
+scanner, the raw data was under a tiff format which is a special image
+format used for histopathological data. Participating in this
+challenge enabled me to have a first experience with histopathology
+data and its many technical particularities, to become familiar with classical computer vision approaches and
+finally allowed me to use strong computational resources, via a
+cluster of computers. 
+%However, this challenge did not involve any
+%crossing between heterogeneous types of data such as those describe in
+%the earlier paragraphs. 
+Participating in this challenge was a first
+opportunity for me to tackle a metastasis detection challenge with a
+huge amount of segmentation annotation, which is fairly rare.
+
+%The Challenge was organized in conjunction with the support of the 2016 IEEE International Symposium on Biomedical Imaging  (ISBI-2016) and this is the first challenge using whole-slide images in histopathology. This challenge fitted particularly well with my PhD time table as the data used in this challenge is very similar to the data acquired by F. Reyal. 
 %However, our final ranking was not very satisfying as we did not achieve good results.
 This work was done with the help of V. Machairas, T. Walter and E. Decenciere. A website was made for the purpose of this challenge, \url{http://camelyon16.grand-challenge.org/home/}.
 \\
 
-However, we did not have the intent of submitting a competitive solution. As I had only started my PhD three months prior the challenge's deadline, however we had other incentives: Camelyon2016 provided an amazing data set, over 500 Gygabytes of annotated histopathology image files. This data was fully annotated and segmented with respect to the metastasis regions. This dataset was of very high standard, which can be rare for such a scale, this is the main reason for our entry, allowing me to have a toy annotated data set in order to gain a first experience with histopathology data and it's problematics. Having no initial experience with raw image data (the data in my masters project had already been extracted from the images) and with computer clusters, these two aspects were among the hardest parts for me in this challenge. Dealing with the raw images implied learning how to use the openslide library, the image files were of a special type. Being able to use the cluster implied, learning bash script, cluster organisation, dealing with installation issues and overall, being very familiar with a command line.
+However, we did not have the intent of submitting a competitive
+solution. As I had only started my PhD three months prior the
+challenge's deadline, however we had other incentives: Camelyon2016
+provided an amazing data set, over 500 Gygabytes of annotated
+histopathology image files. This data was fully annotated and
+segmented with respect to the metastasis regions. This dataset was of
+very high standard, which can be rare for such a scale, this is the
+main reason for our entry, allowing me to have a toy annotated data
+set in order to gain a first experience with histopathology data and
+it's problematics. Having no initial experience with raw image data
+(the data in my masters project had already been extracted from the
+images) and with computer clusters, these two aspects were among the
+hardest parts for me in this challenge. Dealing with the raw images
+implied learning how to use the openslide library, the image files
+were of a special type. Being able to use the cluster implied,
+learning bash script, cluster organisation, dealing with installation
+issues and overall, being very familiar with a command line. 
 
 \subsection{Context}
 The goal of this challenge is to evaluate new and existing algorithms for automated detection of metatases in H\&E stained whole-slide images of lymph node sections, see figure \ref{LymphNode}. This task has a high clinical relevance but requires large amounts of reading time from pathologists. Therefore, a successful solution would hold great promise to reduce the workload of the pathologists while at the same time reduce the subjectivity in diagnosis. The Camelyon2016 challenge will focus on sentinel lymph nodes of breast cancer patients and 2 large datasets have been provided from both the Radboud University Medical Center (Nijmegen, the Netherlands), as well as the University Medical Center Utrecht (Utrecht, the Netherlands). The focus on lymph nodes of breast cancer patients is not arbitrary, lymph node metastases occur in most cancer types (e.g. breast, prostate, colon). Lymph nodes are small glands that filter lymph, the fluid that circulates through the lymphatic system. The lymph nodes in the underarm are the first place breast cancer is likely to spread. Metastatic involvement of lymph nodes is one of the most important prognostic variables in breast cancer. Prognosis is poorer when cancer has spread to the lymph nodes.
@@ -691,7 +753,22 @@ This challenge was very rewarding as the he taught me a huge amount about cluste
 
 \subsection{Challenge Results and ISBI 2016}
 
-As I participated to this challenge it was interesting for me to attend the presentations concerning it. We were among the 23 teams out of the 208 teams that submitted a solution. We obtained an Area Under the Curve of 0.63 and obtained a final ranking 22nd, see figure \ref{Eval: ROC}. Of the 23 submissions, only 3 used "classical methods" (on the contrary to neural networks) to extract information from the WSI. The best of these three teams reached an area under the ROC curve of 0.76 and finished 11. The 3rd team performing classical methods was last. After a brief presentation of the best performing team within classical extraction method, we would hope that our method could reach 0.76 via a better tuning, with respect to the feature, model parameters and model evaluation. Indeed, they had the same pipeline with the same main parts as ours. However, all the other teams used pre-trained or existing architecture and achieved much better result than the classical methods. This gave us a clear view of my next interest, deep neural networks.
+As I participated to this challenge it was interesting for me to
+attend the presentations concerning it. We were among the 23 teams out
+of the 208 teams that submitted a solution. We obtained an Area Under
+the Curve of 0.63 and obtained a final ranking 22nd, see figure
+\ref{Eval: ROC}. Of the 23 submissions, only 3 used "classical
+methods" (on the contrary to neural networks) to extract information
+from the WSI. The best of these three teams reached an area under the
+ROC curve of 0.76 and finished 11. The 3rd team performing classical
+methods was last. After a brief presentation of the best performing
+team within classical extraction method, we would hope that our method
+could reach 0.76 via a better tuning, with respect to the feature,
+model parameters and model evaluation. Indeed, they had the same
+pipeline with the same main parts as ours. However, all the other
+teams used pre-trained or existing architecture and achieved much
+better result than the classical methods. This gave us a clear view of
+my next interest, deep neural networks. 
 
 \begin{figure}[!ht]
 \centering
@@ -700,25 +777,110 @@ As I participated to this challenge it was interesting for me to attend the pres
 \label{Eval: ROC}
 \end{figure}
 
-This challenge might have been a bit early for me to be truly competitive. Some of the finalist, were advanced labs that tackle on a daily bases segmentation problems. This was my very first experience dealing with histopathology data, mathematical morphology, cluster of computers and team work among different labs. 
+This challenge might have been a bit early for me to be truly
+competitive. Some of the finalist, were advanced labs that tackle on a
+daily bases segmentation problems for histopathology. This was my very first experience
+dealing with histopathology data, mathematical morphology, cluster of
+computers and team work among different labs.  
 
-The conference was held in Prague and I also attended a tutorial on deep neural networks that was given at the end. It lasted 4 days and to the surprise of some, histopathology has gained in popularity as you could easily end up listening to only histopathology talks. In most histopathology talks, neural network, the state of the art in image processing were used. It seems, as I focus on application, that it is essential for me to try and to apply deep convolutionnal network.
+The conference was held in Prague and I also attended a tutorial on
+deep neural networks that was given at the end. It lasted 4 days and
+to the surprise of some, histopathology has gained in popularity as
+you could easily end up listening to only histopathology talks. In
+most histopathology talks, neural network, the state of the art in
+image processing were used. It seems, as I focus on application, that
+it is essential for me to try and to apply deep convolutionnal
+networks. 
 
 
-\section{May 2016 and future work}
-From May to now, my main focus has returned to the datasets provided by the collaborations involved in this PhD. In particular I had to acquire the data set from F. Reyal. The work pipeline for this project is pictured in \ref{workflow1}. The pipeline can be divided in three parts: computer vision in order to extract encoded information from the raw images. The second is feature extraction on two levels, the biological image data driven features and the extraction of the other data type. This data type can be molecular driven, transcriptomic, another type of image data. The final part of this project will then be to derive a statistical model in order to find correlations between the different types of data, improve prognosis prediction and overall try to better quantify and understand cancer progression. I will only discuss part one as it is the one I am currently at.
+\section{Current work}
+From May to now, my main focus has returned to the datasets provided
+by the collaborations involved in this PhD. In particular I had to
+acquire the data set from F. Reyal. The work pipeline for this project
+is pictured in \ref{workflow1}. The pipeline can be divided in three
+parts: computer vision in order to extract encoded information from
+the raw images. The second is feature extraction on two levels, the
+biological image data driven features and the extraction of the other
+data type. This data type can be molecular driven, transcriptomic,
+another type of image data. The final part of this project will then
+be to derive a statistical model in order to find correlations between
+the different types of data, improve prognosis prediction and overall
+try to better quantify and understand cancer progression. I will only
+discuss part one as it is the one I am currently at. 
+
+
 
 
 \subsection{Data}
 
-The tissue samples were extracted from the patients in two steps, first was performed a biopsy extraction as it is pictured in \ref{workflow1}, a biopsy sample is a thin piece of tissue that can be performed without a full surgery. A biopsy will inform the practitioner if he must perform surgery to remove the tumor or apply a chemotherapy based treatment. Here however, all patients received a chemotherapy based treatment after the biopsy. After the treatment, in order to asses the progression of the cancer, the surgeons extracted whole tumor slides from the patients. We also have genomic, clinical data for some patients, but this part will not be discussed as it has not been dealt with yet. Having this data scheme could allow us to extract more information on top of the primal objective, in particular we could try and quantify patients response to chemotherapy.
+The tissue samples were extracted from the patients in two steps,
+first was performed a biopsy extraction as it is pictured in
+\ref{workflow1}, a biopsy sample is a thin piece of tissue that can be
+performed without a full surgery. A biopsy will inform the
+practitioner if he must perform surgery to remove the tumor or apply a
+chemotherapy based treatment. Here however, all patients received a
+chemotherapy based treatment after the biopsy. After the treatment, in
+order to asses the progression of the cancer, the surgeons extracted
+whole tumor slides from the patients. We also have genomic, clinical
+data for some patients, but this part will not be discussed as it has
+not been dealt with yet. Having this data scheme could allow us to
+extract more information on top of the primal objective, in particular
+we could try and quantify patients response to chemotherapy. 
+
 
 \subsection{Computer vision}
+The detailed pipeline for this part can be seen in
+\ref{ComputerVision}, this scheme is similar in the first steps to
+those performed in the camelyon challenge 2016. In this first steps,
+we wish to find regions of interest, which can be resumed to finding
+the tissue areas in the WSI. The data here was a lot more messier,
+some annotations were performed via a permanent marker on several
+slides and had to be removed. The slide label was also in most of the
+WSI and had to be removed via a pixel value segmentation. Once the
+tissue information was discovered in the WSI, we extracted small
+patches of size $512 \times 512$. 
 
-The detailed pipeline for this part can be seen in \ref{ComputerVision}, this scheme is similar in the first steps to those performed in the camelyon challenge 2016. In this first steps, we wish to find regions of interest, which can be resumed to finding the tissue areas in the WSI. The data here was a lot more messier, some annotations were performed via a permanent marker on several slides and had to be removed. The slide label was also in most of the WSI and had to be removed via a pixel value segmentation. Once the tissue information was discovered in the WSI, we extracted small patches of size 512 x 512.
-
-We wish to create biological features with the help of the pathologist. Similar to the work done in \citet{yuan2012quantitative}, we wish to have revelant features. They extract valuable information including: Lymphocytes counts, stromal count, cancer cell count, WSI density profiles, mitotic density counts and so on. However in order to create this biological driven features we have to properly segment the histopathology data. Due to the recent advances in deep neural networks and lately for their performances in segmentation and in medical imaging \citep{UNet,long2015fcn} I wished to become more familiar. I familiarized myself with GPU hardware and with the caffe librabry: \url{http://caffe.berkeleyvision.org/} \citep{jia2014caffe}. Good hardware becomes a necessity when training deep network as it can increase the computation time by x50. The Center for computational biology has a GEFORCE GTX TITAN Z NVIDIA graphics card and I am still struggling to find a suitable place to power it.
-Once the GPU installed, I will be able to fine tune a Fully Convolutionnal Network (FCN) for semantic segmentation \citep{long2015fcn}. On a different note, we will need annotated data for this segmentation task. I will therefore be providing pathologist with a software to enable them to create manual segmentation of the image, via the ITK-SNAP toolkit: \url{www.itksnap.org} \citep{py06nimg}. An issue with creating our own ground-truth is related to the tediousness and yet complicated manual task of segmentation. In one image, you can find up to 50 or 60 cells, so it can be a very long procedure and we can't ask a single pathologist to annotate more then 20 images. To counter balance this lack in data, which is crucial with respect to the training in deep networks, we will augment the data set as described in \citet{UNet} by manual flipping, rotating, creating out of focus effect and by doing elastic transformations of the image. Data augmentation is an important step for the training as it is thanks to these multiple transformations that our model will learn the appropriate invariances,  see section 5.5 in \citep{bishop2006pattern}. We augment the data by shift, \ref{fig:shift}, by rotation, \ref{fig:rot}, by flipping it, \ref{fig:flip} and by doing elastic distortions, \ref{fig:elastic}. Creating out of focus images to augment the data can also be used to learn invariances corresponding to errors caused by the scanner being out of focus, see figure \ref{fig:blur}. This is done by convolving the image with a normalized box filter. In \ref{fig:blur} we used a box filter of size 10. 
+We wish to create biological features with the help of the
+pathologist. Similar to the work done in \citet{yuan2012quantitative},
+we wish to have revelant features. They extract valuable information
+including: Lymphocytes counts, stromal count, cancer cell count, WSI
+density profiles, mitotic density counts and so on. However in order
+to create this biological driven features we have to properly segment
+the histopathology data. Due to the recent advances in deep neural
+networks and lately for their performances in segmentation and in
+medical imaging \citep{UNet,long2015fcn} I wished to become more
+familiar. I familiarized myself with GPU hardware and with the caffe
+librabry: \url{http://caffe.berkeleyvision.org/}
+\citep{jia2014caffe}. Good hardware becomes a necessity when training
+deep network as it can increase the computation time by x50. The
+Center for computational biology has a GEFORCE GTX TITAN Z NVIDIA
+graphics card and I am still struggling to find a suitable place to
+power it. 
+Once the GPU installed, I will be able to fine tune a Fully
+Convolutionnal Network (FCN) for semantic segmentation
+\citep{long2015fcn}. On a different note, we will need annotated data
+for this segmentation task. I will therefore be providing pathologist
+with a software to enable them to create manual segmentation of the
+image, via the ITK-SNAP toolkit: \url{www.itksnap.org}
+\citep{py06nimg}. An issue with creating our own ground-truth is
+related to the tediousness and yet complicated manual task of
+segmentation. In one image, you can find up to 50 or 60 cells, so it
+can be a very long procedure and we can't ask a single pathologist to
+annotate more then 20 images. To counter balance this lack in data,
+which is crucial with respect to the training in deep networks, we
+will augment the data set as described in \citet{UNet} by manual
+flipping, rotating, creating out of focus effect and by doing elastic
+transformations of the image. Data augmentation is an important step
+for the training as it is thanks to these multiple transformations
+that our model will learn the appropriate invariances,  see section
+5.5 in \citep{bishop2006pattern}. We augment the data by shift,
+\ref{fig:shift}, by rotation, \ref{fig:rot}, by flipping it,
+\ref{fig:flip} and by doing elastic distortions,
+\ref{fig:elastic}. Creating out of focus images to augment the data
+can also be used to learn invariances corresponding to errors caused
+by the scanner being out of focus, see figure \ref{fig:blur}. This is
+done by convolving the image with a normalized box filter. In
+\ref{fig:blur} we used a box filter of size 10.  
 
 
 \begin{figure}[!ht]
@@ -769,9 +931,14 @@ Once the GPU installed, I will be able to fine tune a Fully Convolutionnal Netwo
 
 \section{Additionnal notes}
 
-During this first year I attended two courses focused on image processing, the first was in mathematical morphology and is taught by members of the Centre for Mathematical Morphology. It was organized as an intense week course. Furthermore I attended the course \textit{Object recognition and computer vision} proposed by ENS Cachan. 
-I will also be attending the machine learning summer school (MLSS) organized this year in Peru.
-
+During this first year I attended two courses focused on image
+processing, the first was in mathematical morphology and is taught by
+members of the Centre for Mathematical Morphology. It was organized as
+an intense week course. Furthermore I attended the course
+\textit{Object recognition and computer vision} proposed by ENS
+Cachan.  
+I will also be attending the machine learning summer school (MLSS)
+organized this year in Peru. 
 %\begin{figure}[!ht]
 %\centering
 %\includegraphics[width=\textwidth]{}
@@ -781,8 +948,20 @@ I will also be attending the machine learning summer school (MLSS) organized thi
 
 \section{Futur Work}
 
-Collecting annotated data for segmentation is the next step. To help annotate, we will initialize the manual segmentation thanks to previous work. This work, based on mathematical morphology, segments nucleus in the given picture In order to have \textit{true} annotated ground truth about the segmentation, we will manually correct the segmentation output of the mathematical morphology based segmentation. Succeeding in training a fully convolutionnal will be the next step closely followed by the final two parts of the pipeline, i.e. biological feature extraction and elaboration of the statistical model. 
 
+Collecting annotated data for segmentation is the next step. To help
+annotate, we will initialize the manual segmentation thanks to
+previous work. This work, based on mathematical morphology, segments
+nucleus in the given picture In order to have \textit{true} annotated
+ground truth about the segmentation, we will manually correct the
+segmentation output of the mathematical morphology based
+segmentation. Succeeding in training a fully convolutionnal will be
+the next step closely followed by the final two parts of the pipeline,
+i.e. biological feature extraction and elaboration of the statistical
+model.  
+\\
+
+All of my work can be found on my github page, \url{https://github.com/PeterJackNaylor}. For each one of my projects, I create Jupyter notebooks that focus on a very precise topic of the project. This same code is then integrated to longer scripts that fuel the computer clusters.
 \newpage
 \section*{Appendix: cross-validation results}
 
