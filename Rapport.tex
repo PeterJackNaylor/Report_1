@@ -211,21 +211,225 @@ Towards image-based cancer signatures from histopathology data
 
 \section{Introduction}
 
-%Many interesting fields of application have emerged from computer vision and machine learning, a very import one deals with cancer related topics and in particular histopathology.
- Cancer diagnosis involves complex interpretation of a multitude of heterogeneous data, such as genomic, transcriptomic and image data. The image data used in this context corresponds to thin slices of the tumor and of the surrounding tissue, stained with agents in order to highlight specific structures, such as cell nuclei or collagen. The image data is what we call histopathology image data.
-A medical practitioner will routinely check the patients histopathology image data in order to decide the next step in the patient's treatment. Histopathology slides can thus be very informative of the cancer subtype and/or of how the patient's immune system is reacting to the cancer. Adding relevant information extracted from histopathology slides will help make better prognosis for cancer treatment and in particular, help better understand cancer process. 
+In this report, I will give a chronological assessment of my work starting by
+ January 2016. My PhD officially started in November, but I took
+ two extra months to finish my master's project that is now currently
+ on hold. 
 
- We wish to build appropriate tools to quantify the huge amount of data found in histopathology slides. On the long run, such a quantification scheme would fit in a work pipeline that would investigate the most informative physiological features and the links to genomic, transcriptomic features and even possibly different medical imaging such as 3D MRI scans.
+My master project was also in the field of machine
+ learning and computer vision in the biomedical field, however it was not applied to
+ histopathology data but to time-lapse fluorescent microscopy
+ data in the context of High Content Screening. The results I 
+ obtained in my master thesis were indeed very promising, and triggered
+ a series of new experiments, performed at the EMBL Heidelberg. It is
+ relatively likely that this work will result in a
+ publication. Nevertheless, I decided to not include this side project
+ in my first years report.
+
+
+\subsection{Context}
+% What is cancer?
+Cancer is one of the most frequent deadly diseases in the world. In
+2012, 14.1 million adults in the world were diagnosed with cancer and
+8.2 million cancer deaths were reported worldwide. Cancer is a disease
+of the genome, where single cells acquire mutations and other genomic
+modifications leading to
+specific and essential alterations of the cellular and tissular
+phenotypes, that ultimately lead to tumor formation and metastasis
+(*** je t'ajoute des citations, mais si tu veux les enlever, pas de
+problemes ***) \citep{Hanahan2000,Hanahan2011}. 
+
+% Standards in cancer research today
+The advent of next generation sequencing technologies has
+revolutionized cancer research. In a coordinated effort undertaken by
+a large number of research institutions worldwide, thousands of cancer
+genomes have been sequenced. In-depth analysis of such data sets has
+allowed for example the identification of many driver mutations
+(mutations that are causally linked to tumorigenesis) and the
+definition of clinically relevant subtypes \citep{Hudson2010}. Indeed,
+many studies have shown that cancer is a profoundly heterogeneous
+disease. Consequently, one of the most promising strategies for
+finding new and more efficient cancer treatments is to
+tailor the treatment to patient and tumor specific genomic
+features. For this reason, one of the major goals in today’s cancer
+research is to build robust and accurate predictive models in order to
+characterize each tumor in terms of molecular subtype and prognostic
+features and ultimately to predict the optimal therapeutic choice. 
+
+% Use of histopathology data in clinical practice 
+Yet, while massive sequencing approaches and the analysis of genomic,
+epigenomic and transcriptomic features build the main body of current
+bioinformatics programs related to cancer, diagnosis and prognosis in
+clinical practice are not solely based on sequence and gene expression
+data. Indeed, histopathology data (see Figure
+\ref{fig:example_histopath}) is routinely used in clinical
+practice for cancer diagnosis and prognosis. These data  correspond to
+thin slices of the tumor and of the surrounding tissue, stained with
+agents in order to highlight specific structures, such as cell nuclei
+or collagen. A medical practitioner will routinely check the patients
+histopathology image data in order to decide the next step in the
+patient's treatment. Histopathology slides can thus be very
+informative of the cancer subtype and/or of how the patient's immune
+system is reacting to the cancer. However, the interpretation of such
+data is not necessarily straightforward. Indeed, it requires a lot of
+special training and a deep understanding of the underlying physiology
+to interpret such data. Moreover, while some criteria are clearly
+defined, there is also some fuziness in the interpretaion of
+histopathology data in a sense that there are not clear and
+quantitative rules for all aspects of the interpretation. 
+
+
+% type of information
+In contrast to genomic or transcriptomic
+profiling, histopathology assesses phenotypic information at both the
+cellular and the tissue level. Typical features are the mitotic index
+(number of observed cell divisions), the size distribution and spatial
+organization of cells depending on their cell type, 
+or the quantity of dead cells in cancer and surrounding tissue. The
+nature of this type of information is very different from what can be
+obtained from genomic or transcriptomic profiling : indeed, it is
+informative about cellular and tissular phenotypes, including thus a
+spatial and a a morphological dimension.  Both of these dimensions are
+typically absent in sequence based data. Thus,
+stained tumor sections do not only contain useful information for
+cancer prognosis and treatment decisions used in clinical practice
+since years, but the information is also
+to a large extend complementary to molecular features of tumors. 
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[height=4cm]{histo1.png}
+  \caption{}
+  \label{fig:sub1}
+\end{subfigure}%
+~
+\begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[height=4cm]{histo2.png}
+  \caption{}
+  \label{ProbabilityMapLocalMaxima}
+\end{subfigure}
+~
+\begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[height=4cm]{histo3.png}
+  \caption{}
+\end{subfigure}
+\caption{Tissue sections with standard Haematoxylin and Eosin staining.}
+\label{fig:example_histopath}
+\end{figure}
+
+% so far this information is unexploited quantitatively. 
+Yet, histopathology data is still largely unexploited in a systematic and
+quantitative way. There are several reasons for this: 
+\begin{enumerate}
+\item With the
+availability of comprehensive genome, transcriptome and epigenome data
+sets, the hope was that these data could explain many aspects of life
+and virtually all aspects of diseases which are known to be related to
+the genome. Today, we understand that it is necessary the spatial and
+morphological dimensions in the reasoning. 
+\item Digital pathology,
+has only recently become a standard in the field. Still a few years
+ago, the standard
+procedure was to examine the slides on the
+microscope. 
+\item The information
+contained in histopathology data has never been fully
+formalized. While some quantitative (yet manually determined) criteria
+exist, this is not true for the overall interpretation of the slides
+which remains subjective and difficult to model formally. 
+\item There are many technical and methodological challenges related
+  to the automatic analysis of histopathology data which made fully
+  automated analysis of these images unfeasible. 
+\end{enumerate}
+
+%Many interesting fields of application have emerged from computer
+%vision and machine learning, a very import one deals with cancer
+%related topics and in particular histopathology. 
+% Cancer diagnosis involves complex interpretation of a multitude of
+% heterogeneous data, such as genomic, transcriptomic and image
+% data. The image data used in this context corresponds to thin slices
+% of the tumor and of the surrounding tissue, stained with agents in
+% order to highlight specific structures, such as cell nuclei or
+% collagen. The image data is what we call histopathology image data. 
+%
+%A medical practitioner will routinely check the patients
+%histopathology image data in order to decide the next step in the
+%patient's treatment. Histopathology slides can thus be very
+%informative of the cancer subtype and/or of how the patient's immune
+%system is reacting to the cancer. 
+%
+%Adding relevant information
+%extracted from histopathology slides will help make better prognosis
+%for cancer treatment and in particular, help better understand cancer
+%process.  
+
+In this PhD thesis, I want to contribute to the generation of the
+appropriate tools to quantify the huge amount of data found in
+histopathology slides. On the long run, such a
+ quantification scheme would fit in a work pipeline that would
+ investigate the most informative physiological features at the
+ cellular and the tissue level and the links
+ to genomic, transcriptomic features and even possibly different
+ medical imaging such as 3D MRI scans. 
  
- I will give a chronological assessment of my work starting by January, even though I officially started my PhD in November, I took two extra months to finish my master's project that is now currently on hold. This master project was also in the field of machine learning and computer vision, however it was not applied to histopathology data but to live imaging of fluorescent microscopic data. 
+
+\subsection{PhD subject: objectives}
+
+This  PhD  project aims at developing the tools to take advantage of
+the morphological and spatial information at the cellular and tissular
+scale from histopathology data. 
+
+%is a first step in integrating morphological and
+%phenotypic information at the cellular and tissular scale into a
+%bioinformatics workflow. 
+
+The basic workflow is shown in Figure \ref{workflow1}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{Workflow.png}
+\caption{Workflow}
+\label{workflow1}
+\end{figure}
 
 
-\subsection*{PhD subject}
+Acquiring phenotypic information requires
+segmentation methods that are easily adaptable to new data
+sets. 
 
-This  PhD  project is a first step in integrating morphological and phenotypic information at the cellular and tissular scale into a bioinformatics workflow. Acquiring phenotypic information requires segmentation methods that our easily adaptable to new data sets. Identifying different segmented objects within the image follows naturally, objects worth detection are cells with their phenotypic categories (cellular level), or detecting metastasis regions (whole slide level). On top of this, we can derive original features describing the spatial distributions of all of these classes. To quantify the relevance of our method we will to apply  our methods to two datasets: (1) 208 slides from an unpublished study on breast cancer, a special type of very aggressive breast cancer  and (2) 198 slides from a recently published study on bladder cancer \citep{biton2014independent}. In these two applications we are investigating the phenotypic implications of the molecularly defined subgroups and the predictability of treatment response by automatic analysis of histopathology data.  We hope to identify links between cellular phenotypes, transcriptomic and grading data that will feed future projects in this field with interesting hypotheses. All of the methods developed in this project will be made publicly available to the scientific community by integrating them into the open source software CellCognition (\url{http://www.cellcognition.org}). For the moment, I have only had access to dataset (1).
+Identifying different segmented objects within the image follows
+naturally, objects worth detection are cells with their phenotypic
+categories (cellular level), or detecting metastasis regions (whole
+slide level). 
 
-\subsection*{Context and related work}
+On top of this, we can derive original features
+describing the spatial distributions of all of these classes. 
 
+\paragraph{Data sets}
+
+To
+quantify the relevance of our method we will to apply  our methods to
+two datasets: (1) 208 slides from an unpublished study on breast
+cancer, a special type of very aggressive breast cancer  and (2) 198
+slides from a recently published study on bladder cancer
+\citep{biton2014independent}. In these two applications we are
+investigating the phenotypic implications of the molecularly defined
+subgroups and the predictability of treatment response by automatic
+analysis of histopathology data.  We hope to identify links between
+cellular phenotypes, transcriptomic and grading data that will feed
+future projects in this field with interesting hypotheses. All of the
+methods developed in this project will be made publicly available to
+the scientific community by integrating them into the open source
+software CellCognition (\url{http://www.cellcognition.org}). For the
+moment, I have only had access to dataset (1). 
+
+\paragraph{Main difficulties}
+
+\subsection{Related work}
 
 Extracting biological features from image data is a difficult task as one must be able to identify entities within histopathology slides. Image segmentation and object recognition in medical imagining have been tackled for many years and many approaches have been found. Raw feature extraction via morphological operators is a classical method as it enables a user to manually define what type of information he wishes to extract \citep{irshad2014methods}. Segmentation methods based on a strong priori information are also possible and yield comparable results, in \citet{ranefall2016fast} they use segment the picture using a ellispe fit, however the method in \citep{ranefall2016fast} is considerably faster. Graph-based tools for segmentation are also possible in histopathology \citep{ta2009graph}. \citet{manivannanlocal} focus on gland segmentation, they achieve good results by predicting image patches as a whole, via a classification scheme. The output confidence vector is then preprocessed to obtain the final segmentation. Alternative methods have arose from the achieving Convolutional neural networks \citep{lecun}, in particular strong incentive rose with the very impressive results that they achieved in the pascal voc challenge with \citet{ImageNet}. Recent advances in deep neural network, and in particular in their optimization have made them become the state-of-the-art model for object recognition. 
 %Convolutional neural networks were the first neural network in computer vision and succeed in becoming a benchmark for the MNIST data set \citep{lecun}, 
@@ -439,13 +643,6 @@ The conference was held in Prague and I also attended a tutorial on deep neural 
 
 \section{May 2016 and future work}
 From May to now, my main focus has returned to the datasets provided by the collaborations involved in this PhD. In particular I had to acquire the data set from F. Reyal. The work pipeline for this project is pictured in \ref{workflow1}. The pipeline can be divided in three parts: computer vision in order to extract encoded information from the raw images. The second is feature extraction on two levels, the biological image data driven features and the extraction of the other data type. This data type can be molecular driven, transcriptomic, another type of image data. The final part of this project will then be to derive a statistical model in order to find correlations between the different types of data, improve prognosis prediction and overall try to better quantify and understand cancer progression. I will only discuss part one as it is the one I am currently at.
-
-\begin{figure}[!ht]
-\centering
-\includegraphics[width=\textwidth]{Workflow.png}
-\caption{Workflow}
-\label{workflow1}
-\end{figure}
 
 
 \subsection{Data}
