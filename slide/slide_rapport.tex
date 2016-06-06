@@ -3,6 +3,7 @@
 \addbibresource{biblio}
 \usepackage{color}
 
+\usepackage{multicol}
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -464,19 +465,6 @@ Using features from ilastik (implemented in vigra, c++ library)
 \end{columns}
 \end{frame}
 
-\begin{frame}{Superpixels/Waterpixels}
-Superpixels: Regions resulting from a low-level segmentation. 
-They have these proprieties: \textcolor{red}{homogeneity, connected partitions, adherence to object boundaries, regularity}.
-\begin{figure}[!ht]
-\centering
-\includegraphics[width=\textwidth]{Waterpixels.png}
-\caption{Illustration of how superpixels are used}
-\label{}
-\end{figure}
-\begin{small}
-For more details, see \cite{deconvolution}.
-\end{small}
-\end{frame}
 
 \begin{frame}{Pixel based classifier: outputs}
 
@@ -510,9 +498,15 @@ For more details, see \cite{deconvolution}.
 \end{small}
 \end{frame}
 
-\begin{frame}{Results}
-Should I talk about the results?
-Difficulties?
+\begin{frame}{Results and perspective}
+\begin{itemize}
+\item We had an AUC score of 0.56.
+\item Our features are based ilastik/waterpixels at different scales.
+\item Unsufficient to predict the higlhly variable metastasis tissue.
+\item Methods based on deep architecture achieved good performances.
+\item Learning which features are relevant is the key point.
+\item Next step: segmentation based on deep architecture, fully convolutionnal networks \cite{FCN}.
+\end{itemize}
 \end{frame}
 
 
@@ -526,6 +520,49 @@ Difficulties?
 \includegraphics[width=\textwidth]{ComputerVision.png}
 \end{frame}
 
+\begin{frame}{Annotations}
+\begin{itemize}
+\item Manual annotations at the cell/tissue level.
+\item Issue very little ground truth while deep networks need a lot of data? Data augmentation! \\
+\end{itemize}
+
+\begin{figure}
+\begin{multicols}{6}
+	\begin{subfigure}{0.2\textwidth}
+    \includegraphics[width=0.9\textwidth]{BIS.png}\par 
+     \caption{Original image}
+     \label{fig:original}
+	\end{subfigure}%
+	\begin{subfigure}{0.2\textwidth}
+    \includegraphics[width=0.9\textwidth]{shift.png}\par 
+    \caption{Translated}
+    \label{fig:shift}
+	\end{subfigure}%
+	\begin{subfigure}{0.2\textwidth}
+    \includegraphics[width=0.9\textwidth]{rot.png}\par 
+     \caption{Rotated}
+     \label{fig:rot}
+	\end{subfigure}%
+    \begin{subfigure}{0.2\textwidth}
+    \includegraphics[width=0.9\textwidth]{flip.png}\par 
+     \caption{Vertical flip}
+     \label{fig:flip}
+	\end{subfigure}%
+	\begin{subfigure}{0.2\textwidth}
+    \includegraphics[width=0.9\textwidth]{blur.png}\par 
+    \caption{Out of focus}
+    \label{fig:blur}
+	\end{subfigure}%
+	\begin{subfigure}{0.2\textwidth}
+    \includegraphics[width=0.9\textwidth]{ELAST.png}\par 
+     \caption{Elastic deformation}
+     \label{fig:elastic}
+	\end{subfigure}%
+\end{multicols}
+\caption{Data augmentation}
+\end{figure}
+
+\end{frame}
 
 \section{Conclusion}
 
@@ -540,6 +577,10 @@ Difficulties?
 \end{frame}
 
 
+\begin{frame}
+The end! :-)
+\end{frame}
+\section*{Appendix}
 
 \begin{frame}{Camelyon16}
 
@@ -807,6 +848,19 @@ $$\sum \frac{y_i+1}{2} \geqslant 1, \forall I \ s.t \ Y_I=1 \ \text{and} \ y_i=-
 \end{frame}
 
 
+\begin{frame}{Superpixels/Waterpixels}
+Superpixels: Regions resulting from a low-level segmentation. 
+They have these proprieties: \textcolor{red}{homogeneity, connected partitions, adherence to object boundaries, regularity}.
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{Waterpixels.png}
+\caption{Illustration of how superpixels are used}
+\label{}
+\end{figure}
+\begin{small}
+For more details, see \cite{waterpixel}.
+\end{small}
+\end{frame}
 \end{document}
 
 
