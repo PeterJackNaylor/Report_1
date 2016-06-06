@@ -2,7 +2,11 @@
 \usepackage{biblatex}
 \addbibresource{biblio}
 \usepackage{color}
-
+%%to remove caption figure
+\usepackage{caption}
+\captionsetup[figure]{labelformat=empty}%
+\usepackage{multimedia}
+\usepackage{media9}
 \usepackage{multicol}
 \usepackage{graphicx}
 \usepackage{caption}
@@ -16,6 +20,13 @@
      \tableofcontents[currentsection]
      \end{frame}
   }
+
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
 
 \title{Towards image-based cancer signatures from histopathology data}
 
@@ -35,7 +46,9 @@
   \end{frame}
 }
 
-
+\titlegraphic{\includegraphics[height=1.5cm]{Mines_ParisTech.png}~
+	  \includegraphics[height=1.5cm]{CURIE.jpg}~
+	  \includegraphics[height=1.5cm]{INSERM.jpg}}
 \begin{document}
 
 \begin{frame}
@@ -86,12 +99,27 @@ Early 2000, first sequencing.
 \item H2B-eGFP is informative about the mitotic events.
 \item PCNA-mcherry is informative about non mitotic events.
 \end{itemize}
+
+\begin{columns}[T] % align columns
+
+\begin{column}{.45\textwidth}
 \begin{figure}
 \centering
-\includegraphics[width=0.5\textwidth]{Images/plate_well.png}
+\movie[autostart,loop,poster,width=\textwidth,showcontrols=false]{\includegraphics[width=\textwidth]{defaultblack.jpg}}{Incenp.mp4}
+\caption{Incenp}
+\end{figure}
+\end{column}
+
+\begin{column}{.45\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Images/plate_well.png}
 \caption{High Content Screening}
 \end{figure}
+\end{column}
+\end{columns}
 \end{frame}
+
 
 \begin{frame}{Recycling the MitoCheck project}
 The mitocheck dataset is a unique dataset with a chromosome marker (H2B-eGFP). 200 000 filmed loss of function experiments. Can we used this data set to study the non-mitotic cell cycle phases? Idealy we would use a replication marker (PCNA-mcherry) but it is absent here.
@@ -513,6 +541,7 @@ Using features from ilastik (implemented in vigra, c++ library)
 \section{Current work}
 %% I will talk about my current work + data F.Reyal
 %% 6/7 slides approx
+
 \begin{frame}{PhD pipeline}
 \includegraphics[width=\textwidth]{Workflow_overview.png}
 \end{frame}
@@ -520,47 +549,120 @@ Using features from ilastik (implemented in vigra, c++ library)
 \includegraphics[width=\textwidth]{ComputerVision.png}
 \end{frame}
 
+\begin{frame}{Data}
+Very similar data as Camelyon2016!
+\begin{columns}[T] % align columns
+\begin{column}{.5\textwidth}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.9\textwidth]{slideFabien1.png}\par 
+\caption{Whole slide tumor}
+\label{fig: fab1}
+\end{figure}
+\end{column}%
+
+
+\end{columns}
+
+
+\end{frame}
+
+
 \begin{frame}{Annotations}
 \begin{itemize}
 \item Manual annotations at the cell/tissue level.
 \item Issue very little ground truth while deep networks need a lot of data? Data augmentation! \\
 \end{itemize}
 
-\begin{figure}
-\begin{multicols}{6}
-	\begin{subfigure}{0.2\textwidth}
-    \includegraphics[width=0.9\textwidth]{BIS.png}\par 
-     \caption{Original image}
-     \label{fig:original}
-	\end{subfigure}%
-	\begin{subfigure}{0.2\textwidth}
-    \includegraphics[width=0.9\textwidth]{shift.png}\par 
-    \caption{Translated}
-    \label{fig:shift}
-	\end{subfigure}%
-	\begin{subfigure}{0.2\textwidth}
-    \includegraphics[width=0.9\textwidth]{rot.png}\par 
-     \caption{Rotated}
-     \label{fig:rot}
-	\end{subfigure}%
-    \begin{subfigure}{0.2\textwidth}
-    \includegraphics[width=0.9\textwidth]{flip.png}\par 
-     \caption{Vertical flip}
-     \label{fig:flip}
-	\end{subfigure}%
-	\begin{subfigure}{0.2\textwidth}
-    \includegraphics[width=0.9\textwidth]{blur.png}\par 
-    \caption{Out of focus}
-    \label{fig:blur}
-	\end{subfigure}%
-	\begin{subfigure}{0.2\textwidth}
-    \includegraphics[width=0.9\textwidth]{ELAST.png}\par 
-     \caption{Elastic deformation}
-     \label{fig:elastic}
-	\end{subfigure}%
-\end{multicols}
-\caption{Data augmentation}
+\begin{columns}[T] % align columns
+\begin{column}{.16\textwidth}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.9\textwidth]{BIS.png}\par 
+\caption{Original}
+\label{fig: ori}
 \end{figure}
+\end{column}%
+\begin{column}{.16\textwidth}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.9\textwidth]{shift.png}\par 
+\caption{Translated}
+\label{fig:shift}
+\end{figure}
+\end{column}%
+\begin{column}{.16\textwidth}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.9\textwidth]{rot.png}\par 
+\caption{Rotated}
+\label{fig:rot}
+\end{figure}
+\end{column}%
+\begin{column}{.16\textwidth}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.9\textwidth]{flip.png}\par 
+\caption{Flipped}
+\label{fig: flip}
+\end{figure}
+\end{column}
+\begin{column}{.16\textwidth}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.9\textwidth]{blur.png}\par 
+\caption{Blurred}
+\label{fig: blur}
+\end{figure}
+\end{column}%
+\begin{column}{.16\textwidth}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.9\textwidth]{ELAST.png}\par 
+\caption{Elastic distortion}
+\label{fig: Elastic distortions}
+\end{figure}
+\end{column}%
+
+\end{columns}
+
+Data augmentation can make the network learn the proper invariances!
+%
+%\begin{figure}
+%\begin{multicols}{6}
+%	\begin{subfigure}{0.2\textwidth}
+%    \includegraphics[width=0.9\textwidth]{BIS.png}\par 
+%     \caption{Original image}
+%     \label{fig:original}
+%	\end{subfigure}%
+%	\begin{subfigure}{0.2\textwidth}
+%    \includegraphics[width=0.9\textwidth]{shift.png}\par 
+%    \caption{Translated}
+%    \label{fig:shift}
+%	\end{subfigure}%
+%	\begin{subfigure}{0.2\textwidth}
+%    \includegraphics[width=0.9\textwidth]{rot.png}\par 
+%     \caption{Rotated}
+%     \label{fig:rot}
+%	\end{subfigure}%
+%    \begin{subfigure}{0.2\textwidth}
+%    \includegraphics[width=0.9\textwidth]{flip.png}\par 
+%     \caption{Vertical flip}
+%     \label{fig:flip}
+%	\end{subfigure}%
+%	\begin{subfigure}{0.2\textwidth}
+%    \includegraphics[width=0.9\textwidth]{blur.png}\par 
+%    \caption{Out of focus}
+%    \label{fig:blur}
+%	\end{subfigure}%
+%	\begin{subfigure}{0.2\textwidth}
+%    \includegraphics[width=0.9\textwidth]{ELAST.png}\par 
+%     \caption{Elastic deformation}
+%     \label{fig:elastic}
+%	\end{subfigure}%
+%\end{multicols}
+%\caption{Data augmentation}
+%\end{figure}
 
 \end{frame}
 
@@ -577,12 +679,12 @@ Using features from ilastik (implemented in vigra, c++ library)
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}[noframenumbering]
 The end! :-)
 \end{frame}
 \section*{Appendix}
 
-\begin{frame}{Camelyon16}
+\begin{frame}[noframenumbering]{Camelyon16}
 
 \begin{columns}[T] % align columns
 \begin{column}{.50\textwidth}
@@ -612,7 +714,7 @@ The end! :-)
 
 \end{frame}
 
-\begin{frame}{Camelyon16}
+\begin{frame}[noframenumbering]{Camelyon16}
 
 \begin{columns}[T] % align columns
 \begin{column}{.50\textwidth}
@@ -646,7 +748,7 @@ The end! :-)
 
 % You can reveal the parts of a slide one at a time
 % with the \pause command:
-\begin{frame}{Evaluation}
+\begin{frame}[noframenumbering]{Evaluation}
 Two evaluation metrics and two leader boards. \\
 \textcolor{red}{Slides based:}
 \begin{itemize}
@@ -661,7 +763,7 @@ Two evaluation metrics and two leader boards. \\
 \end{itemize}
 \end{frame}
 
-\begin{frame}{The data set}
+\begin{frame}[noframenumbering]{The data set}
 \begin{columns}[T] % align columns
 \begin{column}{.5\textwidth}
 Data set provided:
@@ -697,7 +799,7 @@ Data set provided:
 \end{frame}
 
 
-\begin{frame}{Images}
+\begin{frame}[noframenumbering]{Images}
 \textcolor{red}{Very large number of samples:}
 \begin{itemize}
 \item In pixel classification, each pixel is an instance, n $\gg$ p.
@@ -706,7 +808,7 @@ Data set provided:
 \end{frame}
 
 
-\begin{frame}{Subsampling 1}
+\begin{frame}[noframenumbering]{Subsampling 1}
 \textcolor{red}{Subsampling 1} (region of interest detection over slides)
 Trying to find interesting part of the image. \\
 We can divide sub-images in 4 groups.
@@ -718,7 +820,7 @@ We can divide sub-images in 4 groups.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Subsampling}
+\begin{frame}[noframenumbering]{Subsampling}
 
 \begin{columns}[T] % align columns
 \begin{column}{.25\textwidth}
@@ -756,7 +858,7 @@ We can divide sub-images in 4 groups.
 \end{columns}
 \end{frame}
 
-\begin{frame}{Ilastik - examples}
+\begin{frame}[noframenumbering]{Ilastik - examples}
 \begin{columns}[T] % align columns
 \begin{column}{.8\textwidth}
 \begin{figure}[!ht]
@@ -783,7 +885,7 @@ We can divide sub-images in 4 groups.
 \end{columns}
 \end{frame}
 
-\begin{frame}{Waterpixels - examples}
+\begin{frame}[noframenumbering]{Waterpixels - examples}
 \begin{columns}[T] % align columns
 
 \begin{column}{.3\textwidth}
@@ -816,7 +918,7 @@ We can divide sub-images in 4 groups.
 \end{columns}
 \end{frame}
 
-\begin{frame}{Subsampling 2}
+\begin{frame}[noframenumbering]{Subsampling 2}
 \textcolor{red}{Pixel classification}. \\
 Still very large data-set. \\
 260 slides $\rightarrow$ 100 sub-images per slides $\rightarrow$ 1 000 000 pixels per sub-images. \\
@@ -824,7 +926,7 @@ Need for a second resampling. \\
 Resampling randomly? smartly, via unsupervised methods? K means algorithm? 
 \end{frame}
 
-\begin{frame}{Pixel based classifier}
+\begin{frame}[noframenumbering]{Pixel based classifier}
 \textcolor{red}{Finding metastasis regions:}\\
 Each pixel, will be considered metastasis if it belongs to a metastasis region. \\
 Model: random forest. \\
@@ -835,7 +937,7 @@ Model: Multiple instance learning random forest.
 One slide out scheme.
 \end{frame}
 
-\begin{frame}{Multiple instance learning}
+\begin{frame}[noframenumbering]{Multiple instance learning}
 \textcolor{red}{Notations}:
 \begin{itemize}
 \item Pixels are a pair $(x_i,y_i) \in \mathbb{R}^d \times \lbrace -1, +1\rbrace$.
@@ -848,7 +950,7 @@ $$\sum \frac{y_i+1}{2} \geqslant 1, \forall I \ s.t \ Y_I=1 \ \text{and} \ y_i=-
 \end{frame}
 
 
-\begin{frame}{Superpixels/Waterpixels}
+\begin{frame}[noframenumbering]{Superpixels/Waterpixels}
 Superpixels: Regions resulting from a low-level segmentation. 
 They have these proprieties: \textcolor{red}{homogeneity, connected partitions, adherence to object boundaries, regularity}.
 \begin{figure}[!ht]
