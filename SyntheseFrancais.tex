@@ -1,0 +1,38 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+%%%\geometry{hmargin=2.5cm,vmargin=3cm}
+
+\title{Note de synthèse}
+\author{Peter Naylor}
+\date{16 October 2014}
+
+\begin{document}
+\begin{center}
+\begin{Large}\underline{Etude du cycle cellulaire par l'imagerie.}
+\\
+\vspace{0.3cm}
+\textit{Note de synthèse} \\
+Naylor Peter
+\end{Large}
+\end{center}
+
+J'ai étudié l'apprentissage statistique et les algorithmes d'apprentissage automatiques pendant ma dernière année à l'ENSAE ParisTech. Je souhaitais appliquer mes connaissances dans le domaine académique et plus précisément en imagerie médicale. Thomas Walter, mon maître de stage, m'a donné cette opportunité avec ce stage de recherche au centre de biologie computationnelle (cbio). J'ai aussi pu travailler avec une thésarde du laboratoire. La problématique de mon stage était la suivante: Est-il possible de prédire les différentes phases du cycle cellulaire, qui sont \textit{M, G1, S} et \textit{G2}, à l'aide d'une histone fluorescente \texttt{H2B}? Ce marqueur est a priori seulement informatif pour les sous phases de la mitose.
+
+\bigskip
+
+Les données brutes sont des films acquis par des techniques de micro-scopie sur des cellules cancéreuses dans leur environnement. Le cycle cellulaire est composé des différentes phases de la mitose et des trois phases de l'interphase, \textit{G1, S} et \textit{G2}. Le but de ce stage est de différencier les différentes phases de l'interphase, en d'autres mots, est-il possible de trouver des règles de décision liées seulement aux variables prises sur l'image pour différencier les sous phases de l'interphase. Les variables peuvent être de natures très différentes, elles peuvent concerner la taille, l'intensité ou bien d'autres mesures telles que les variables de haralic. Nous avons 239 variables et 1272 individus labélisés, (un individu représente une cellule sur une des images). Nous extrayons les variables et les données à l'aide du logiciel \textit{CellCognition}. Ce logiciel co-developpé par Thomas Walter, permet la segmentation des cellules sur l'image, et à partir de ces segmentations, il en extrait un vecteur de 239 variables. Les biologistes ont contribué à ce projet en annotant les phases des données d'apprentissage. Alice Schoenauer Sebag, une thésarde du laboratoire, a regroupé tous les individus, qui caractérisent une cellule à un instant donné, qui sont issus de la même trajectoire. Alice a pu assembler ces trajectoires par étude de leur mobilité.
+
+\bigskip
+
+
+Le modèle final peut être décomposé en trois sous modèles. Le premier est un modèle de prédiction binaire où l'enjeu est de prédire si la cellule est en phase de mitose ou non. La mitose est connue pour être facilement reconnaissable avec l'histone \texttt{H2B}. Les données pour le premier sous modèle sont les données brutes d'extraction de \textit{CellCognition}. On avait besoin de ce modèle car nous avions initialement peu d'individus labélisés en mitose. Le deuxième classificateur n'essaie de prédire que les phases de l'interphase, c'est à dire \textit{G1}, \textit{S} et \textit{G2}. Pour améliorer les performances pour ce modèle, nous procédons à une normalisation des données pour que celles-ci représentent plutôt leur évolution par rapport à leur donnée initiale. En d'autres termes, nous prenons en compte l'évolution des différentes variables vis-à-vis de leur première apparition après la mitose. Le dernier modèle est un modèle à correction d'erreurs qui va prendre en compte plus fortement l'aspect temporel entre les images. Notre modèle atteint un taux de bonnes prédictions de 86\% en moyenne. On remarque cependant que notre modèle peine à différencier les phases \textit{S} et \textit{G2}. Cela peut paraître normal si on regarde les images brutes, car il est très difficile de différencier à l'oeil nu ces deux états avec l'histone \texttt{H2B} seulement.
+
+\bigskip
+
+Cet apprentissage avait pour but de prédire les phases des cellules dans la base de données MitoCheck, qui est un projet Européen sur des expériences "less-of-function" analysées par technique d'imagerie. En d'autres mots, nous avons plus de 200 000 vidéos d'imagerie cellulaire et pour chacun de ces films une certaine protéine a été fortement réduite. Cette procédure nous permet d'inférer la fonction de cette protéine dans le cycle cellulaire. Si nous pouvions correctement pister et classifier les cellules, on pourrait inférer le rôle des protéines dans l'interphase. Cette base de données possède l'histone fluorescent \texttt{H2B} qui est très informative pour les phases de la mitose mais ne l'est pas a priori pour les phases de l'interphase. En l'absence de vérité de terrain, nous ne pouvons quantifier les performances de notre modèle. On essaie tout de même de les quantifier en analysant la taille des différentes phases cellulaires. Pour chaque trajectoire, on essaie de prédire à tout instant la phase de la cellule. La plupart des trajectoires sont inutilisables comme le classifieur n'a prédit qu'une classe. Cependant, les 10\% des trajectoires validées ont un temps de phase \textit{G1} proche des temps donnés dans la littérature biologique. De plus, pour améliorer le pouvoir de prédiction sur la base MitoCheck nous allons utiliser des techniques de transfert d'apprentissage via la pondération des individus. Le transfert d'apprentissage est une branche de l'apprentissage statistique qui relâche une des hypothèse clés : la distribution de la base d'apprentissage diffère de la base que l'on souhaite prédire. L'idée est de faire une sélection dans la base d'apprentissage des individus qui représentent bien la base que l'on souhaite prédire. Les individus qui représentent la base de prédiction seront sur-pondérés alors que ceux n'apparaissant pas dans la base de prédiction seront sous-pondérés. Deux approches de la même méthode furent essayées, l'une où nous choisissons qui on sur-pondère, dans ce cas là, la variété d'individus dans la base d'apprentissage est faible. Dans la deuxième, nous choisissons qui sous-pondérer. Cette approche a l'avantage de faire augmenter le nombre de trajectoires sur lesquelles on peut mesurer la taille de phase \textit{G1}, 70 trajectoires ce sont rajoutées comparé à la méthode sans poids. En particulier, la base d'apprentissage est plus variée que dans l'autre cas de figure.
+\bigskip 
+
+Notre modèle semble approprié pour séparer les phases \textit{G1} et \textit{S} mais peine à différencier les autres phases. Il est basé sur des forts a priori qui ne rendent pas le modèle flexible. En effet, le modèle à correction d'erreurs peut forcer des transitions de phases qui n'existent pas si par exemple une des cellules s'arrêtait subitement dans la phase \textit{S}. Ces arrêts dans le cycle cellulaire sont très intéressants car ce sont eux qui permettraient d'inférer des informations sur les rôles des protéines. Avoir des vérités de terrain est vital pour pouvoir mieux quantifier les pouvoirs prédictifs de notre modèle, l'EMBL, Heidelberg est en train de collecter ces informations. Dans la continuité de ce travail, il serait intéressant de mieux regarder les différences sur les distributions entre les différentes bases de données. Il serait aussi intéressant d'appliquer des méthodes de transfert d'apprentissage via la transformation de variables et non par la pondération des individus comme il se peut que celle-ci ne soit pas adaptée. Mieux comprendre les différences sur les distributions entre les différentes bases permettrait de savoir si la méthode de transfert d'apprentissage via la pondération des individus est adaptée ou non dans notre cas.
+
+\end{document}
