@@ -1,7 +1,20 @@
 \documentclass{beamer}
+\usepackage{biblatex}
+\addbibresource{biblio}
 \usepackage{color}
 
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
 \usetheme{default}
+
+\AtBeginSection[]
+  {
+     \begin{frame}<beamer>
+     \frametitle{Outline}
+     \tableofcontents[currentsection]
+     \end{frame}
+  }
 
 \title{Towards image-based cancer signatures from histopathology data}
 
@@ -36,16 +49,49 @@
 % Section and subsections will appear in the presentation overview
 % and table of contents.
 \section{Introduction}
+\subsection{Cancer Research}
 %%% 2 frames approx
 %Here I will be talking about cancer and why cancer research is important
-\begin{frame}{Title}
-Super text
+\begin{frame}{Cancer research}
+\begin{enumerate}
+\item Cancer $\Longleftrightarrow$ disease of the genome. \\ 
+Early 2000, first sequencing.
+\item Very heterogeneous disease. 2 breast cancers can be totally different on a molecular basis. Disease highly variable in many aspects. Emergence of personalized medicine. 
+\item Clinical motivation for cancer research: profiling each type of tumor, in terms of molecular subtype and prognostic in order features. $\Longrightarrow$ Better understanding, diagnostic, prognostic, ...
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Why image based features in cancer research}
+\begin{itemize}
+\item In clinical practice, one looks at the available image data to give a treatment. 
+\item Finding correspondence/correlations between genes and phenotypic information. 
+\item Highly relevant data can be found. \\
+\begin{itemize}
+\item We can cross protein localization microscopy with loss-of-function experiment.
+\item You access response to disease information, lymphocyte responses to tumor expansion. Different type of information, spatial repartition, neighbouring information, density, ..
+\item Correcting noisy molecular data, mutation data will be mixture of healthy cells, cancerous cells, lymphocytes,...
+\end{itemize}
+\end{itemize}
 \end{frame}
 
 
-\section{Masters/Side project}
+\subsection{Masters/Side project}
 %%% 3 slides
 %%% About the master project
+\begin{frame}{Time-lapse fluorescent microscopy data in the context of High Content Screening}
+\textbf{Time-lapse microscopy}: Microscope image sequences, gives an accelerated view of the microscopic process. \\
+\textbf{Fluorescent}:  In our case, after altering the experimental cells, certain proteins within the cell emit visible wave length. These proteins are used to highlight specific structures.
+\begin{itemize}
+\item H2B-eGFP is informative about the mitotic events.
+\item PCNA-mcherry is informative about non mitotic events.
+\end{itemize}
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{Images/plate_well.png}
+\caption{High Content Screening}
+\end{figure}
+\end{frame}
+
 \begin{frame}{Recycling the MitoCheck project}
 The mitocheck dataset is a unique dataset with a chromosome marker (H2B-eGFP). 200 000 filmed loss of function experiments. Can we used this data set to study the non-mitotic cell cycle phases? Idealy we would use a replication marker (PCNA-mcherry) but it is absent here.
 \begin{figure}[!ht]
@@ -63,7 +109,7 @@ The mitocheck dataset is a unique dataset with a chromosome marker (H2B-eGFP). 2
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.50\textwidth]{Images/PCNA.png}
-\caption{\textcolor{blue}{Figure :} Data acquired by Michael Olma with the \texttt{PCNA} marker}
+\caption{Data acquired by Michael Olma with the \texttt{PCNA} marker}
 \label{PCNA_michael_olma}
 \end{figure}
 \begin{itemize}
@@ -78,7 +124,7 @@ The mitocheck dataset is a unique dataset with a chromosome marker (H2B-eGFP). 2
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.38\textwidth]{Images/H2B.png}
-\caption{\textcolor{blue}{Figure :} Data acquired by Michael Olma with the \texttt{H2B} marker}
+\caption{Data acquired by Michael Olma with the \texttt{H2B} marker}
 \label{H2B}
 \end{figure}
 \begin{itemize}
@@ -141,47 +187,359 @@ To assess our predicition, we looked at different cell cycle phases length out o
 \end{footnotesize}
 \end{frame}
 
+
 \section{Phd Subject}
 %Here I will talk about my phd subject
 %%% 3 frames approx
 
-\begin{frame}{Title}
-Super text
+\begin{frame}{Histopathology: microscopic examination of tissue}
+Different procedure of histopathology in breast cancer.
+\includegraphics[width=\textwidth]{SlidePreparation.png}
+\end{frame}
+\begin{frame}{PhD pipeline}
+\includegraphics[width=\textwidth]{Workflow_overview.png}
+\end{frame}
+\begin{frame}{Main focus}
+ Extracting relevant features at the cellular and tissue
+level. \\
+\textbf{Cellular level:}
+\begin{itemize}
+\item Segmentation at the cellular level. 
+\item Classification of nuclei type: Lymphocyte, cancerous cell, normal cell, ...
+\item Classification of nuclei state: Cell undergoing mitotic event, dead cell, ...
+\end{itemize}
+
+\textbf{Tissue level:}
+\begin{itemize}
+\item Segmentation at the tissue level.
+\item Classification into regions: tumor,
+stromal and necrotic. \\
+Information at the cellular level could be used to help/correct prediction.
+\end{itemize}
+
+Main issue: As we wish this to be easily reproducible, the key problem is the segmentation.
+\end{frame}
+
+\begin{frame}{Application to two datasets}
+\begin{enumerate}
+\item 208 slides from an unpublished study on breast
+cancer, a special type of very aggressive breast cancer  \\
+\emph{Focus: treatment response to chemotherapy}.
+\item 198
+slides from a recently published study on bladder cancer \footcite{biton2014independent}.
+\emph{Focus: Correlation between histopathology features with the
+molecularly defined subgroups.}
+\end{enumerate}
+\end{frame} 
+
+
+
+\begin{frame}{Difficulties}
+%\begin{figure}[!ht]
+%\centering
+%\begin{subfigure}{.3\textwidth}
+%  \centering
+%  \includegraphics[height=4cm]{histo1.png}
+%  \caption{}
+%  \label{fig:sub1}
+%\end{subfigure}%
+%~
+%\begin{subfigure}{.3\textwidth}
+%  \centering
+%  \includegraphics[height=4cm]{histo2.png}
+%  \caption{}
+%  \label{fig:sub2}
+%\end{subfigure}
+%~
+%\begin{subfigure}{.3\textwidth}
+%  \centering
+%  \includegraphics[height=4cm]{histo3.png}
+%  \caption{}
+%  \label{fig:sub3}
+%\end{subfigure}
+%\caption{Tissue sections with standard Haematoxylin and Eosin staining.}
+%\label{fig:example_histopath}
+%\end{figure}
+
+\begin{columns}[T] % align columns
+\begin{column}{.3\textwidth}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{histo1.png}
+%\caption{}
+\label{}
+\end{figure}
+\end{column}%
+\hfill%
+\begin{column}{.3\textwidth}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{histo2.png}
+%\caption{}
+\label{}
+\end{figure}
+\end{column}%
+\hfill%
+\begin{column}{.3\textwidth}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{histo3.png}
+%\caption{}
+\label{}
+\end{figure}
+\end{column}%
+\end{columns}
+{\centering \textit{Tissue sections with standar Haematoxylin and Eosin staining}} 
+\begin{itemize}
+\item [--] High variability in staining.
+\item [--] High variability in tissue objects.
+\item [--] Difficult segmentation task. 
+\end{itemize}
+
+
+\end{frame}
+
+
+\begin{frame}{Large image files: tiled tiff format}
+One individual slide can be up to $50 GB$, uncompressed.
+\begin{columns}[T] % align columns
+\begin{column}{.3\textwidth}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{Tumor_31.png}
+\caption{Tumor 31}
+\textit{7000 x 3500, resolution 6}
+\label{}
+\end{figure}
+\end{column}%
+\hfill%
+\begin{column}{.3\textwidth}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{Tumor_31_res0.png}
+\caption{Sub-image of Tumor 31, highest resolution}
+\textit{1000 x 1000, resolution 0}
+\label{}
+\end{figure}
+\end{column}%
+\hfill%
+\begin{column}{.3\textwidth}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{Tumor_31_res0_zoom.png}
+\caption{Sub-image of Tumor 31, highest resolution (zoom)}
+\textit{100 x 100, resolution 0}
+\label{}
+\end{figure}
+\end{column}%
+%\begin{column}{.25\textwidth}
+%\begin{figure}[!ht]
+%\centering
+%\includegraphics[width=\textwidth ,height=4cm]{pyramid.png}
+%\caption{Pyramid data structure}
+%\textit{Between 8 and 10 different resolutions}
+%\label{}
+%\end{figure}
+%\end{column}
+\end{columns}
+
+%\begin{figure}[!ht]
+%\centering
+%\begin{subfigure}{.25\textwidth}
+%  \centering
+%  \includegraphics[width=\textwidth]{Tumor_31.png}
+%  \caption{}
+%  \label{fig:sub1}
+%\end{subfigure}%
+%~
+%\begin{subfigure}{.25\textwidth}
+%  \centering
+%  \includegraphics[width=\textwidth]{Tumor_31_res0.png}
+%  \caption{}
+%  \label{fig:sub2}
+%\end{subfigure}
+%~
+%\begin{subfigure}{.25\textwidth}
+%  \centering
+%  \includegraphics[width=\textwidth]{Tumor_31_res0_zoom.png}
+%  \caption{}
+%  \label{fig:sub3}
+%\end{subfigure}
+%~
+%\begin{subfigure}{.25\textwidth}
+%  \centering
+%  \includegraphics[width=\textwidth]{pyramid.png}
+%  \caption{}
+%  \label{fig:sub3}
+%\end{subfigure}
+%\caption{Tissue sections with standard Haematoxylin and Eosin staining.}
+%\label{fig:example_histopath}
+%\end{figure}
+
 \end{frame}
 
 
 \section{Tissue segmentation}
 %% I will talk about the challenge, challenging work, novel features, annotated data
 %% approx 6 slides
-\begin{frame}{Title}
-Super text
+\begin{frame}{Camelyon2016}
+
+\begin{columns}[T] % align columns
+\begin{column}{.7\textwidth}
+In many machine learning tasks, annotated data is very expensive. They often require experts and these task are long, tedious and prone to manual errors. Camelyon2016 provides:
+\begin{itemize}
+\item Over $500 GB$ of histopathology slides. (400 slides)
+\item 270 fully annotated slides, for metastasis detection.
+\item First experience with:
+\begin{itemize}
+\item [--] Histopathology data
+\item [--] Computer vision
+\item [--] Dealing with huge databases (clusters of computers)
+\end{itemize} 
+\end{itemize}
+Work in collaboration with V. Machairas, E. Decenciere and T. Walter.
+\end{column}%
+\hfill%
+\begin{column}{.3\textwidth}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1.3\textwidth]{Camelyon16.png}
+\caption{Official logo}
+\label{}
+\end{figure}
+\end{column}%
+\end{columns}
 \end{frame}
+
+\begin{frame}{Pixel based classifier}
+\textcolor{red}{Finding metastasis regions:}\\
+Each pixel, will be considered metastasis if it belongs to a metastasis region. \\
+Model: Modified random forest, each trees see a unique part of the data set. \\
+
+\textcolor{red}{Cross-validation/evaluation:} \\
+One slide out scheme.
+\end{frame}
+
+\begin{frame}{Work pipeline}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.9\textwidth]{workflow.png}
+\caption{Camelyon2016 pipeline}
+\label{Ol}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Ilastik}
+\begin{columns}[T] % align columns
+\begin{column}{.8\textwidth}
+
+Ilastik : software for interactive image classification, segmentation and analysis. \\
+Using features from ilastik (implemented in vigra, c++ library)
+\begin{itemize}
+\item Color/Intensity:
+\begin{itemize}
+\item [--] Gaussian Smoothing
+\end{itemize}
+\item Edge:
+\begin{itemize}
+\item [--] Laplacian of Gaussian
+\item [--] Difference of Gaussians
+\item [--] Gaussian Gradiant Magnitude
+\end{itemize}
+\item Texture:
+\begin{itemize}
+\item [--] Structure Tensor Eigenvalues
+\item [--] Hessian of Gaussian Eigenvalues
+\end{itemize}
+\end{itemize}
+\end{column}%
+\begin{column}{.2\textwidth}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{Ilastik.png}
+\caption{Ilastik}
+\label{}
+\end{figure}
+\end{column}%
+\end{columns}
+\end{frame}
+
+\begin{frame}{Superpixels/Waterpixels}
+Superpixels: Regions resulting from a low-level segmentation. 
+They have these proprieties: \textcolor{red}{homogeneity, connected partitions, adherence to object boundaries, regularity}.
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{Waterpixels.png}
+\caption{Illustration of how superpixels are used}
+\label{}
+\end{figure}
+\begin{small}
+For more details, see \cite{deconvolution}.
+\end{small}
+\end{frame}
+
+\begin{frame}{Pixel based classifier: outputs}
+
+\begin{small}
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[width=\linewidth, height=5cm]{Test_002_whole.png}
+  \caption{RGB raw data.}
+  \label{RawImage}
+\end{subfigure}%
+\begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[width=\linewidth, height=5cm]{whole_probmap_Test_002.png}
+  \caption{Probability map.}
+  \label{ProbabilityMapLocalMaxima}
+\end{subfigure}
+\begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[width=\linewidth, height=5cm]{Detection.png}
+  \caption{Prediction points.}
+  \label{Detecting maxima}
+\end{subfigure}
+\\
+\textit{For figure (c), blue is equal to a low confidence score whereas red means a high confidence.}
+\caption{Evaluation whole slide image, test slide number 2.}
+
+\label{fig:test}
+\end{figure}
+\end{small}
+\end{frame}
+
+\begin{frame}{Results}
+Should I talk about the results?
+Difficulties?
+\end{frame}
+
 
 \section{Current work}
 %% I will talk about my current work + data F.Reyal
 %% 6/7 slides approx
-\begin{frame}{Title}
-Super text
+\begin{frame}{PhD pipeline}
+\includegraphics[width=\textwidth]{Workflow_overview.png}
+\end{frame}
+\begin{frame}{Computer Vision}
+\includegraphics[width=\textwidth]{ComputerVision.png}
 \end{frame}
 
-\section{•}
 
+\section{Conclusion}
 
-\begin{frame}{Camelyon16}{ISBI-2016}
+\subsection{Github and Jupyter notebook}
 
-\begin{figure}[!ht]
-\centering
-\includegraphics[width=\textwidth]{Camelyon16.png}
-\caption{Official logo}
-\label{Ol}
+\begin{frame}{Jupyter notebook and Github}
+\url{https://github.com/PeterJackNaylor?tab=repositories}
+\begin{figure}
+\includegraphics[width=0.8\textwidth]{GitBook.png}
+\caption{Jupyter notebook and github}
 \end{figure}
-Challenge apart of ISBI 2016. \\
-\textcolor{red}{Important date}:
-\begin{itemize}
-\item 1st April 2016, submission deadline.
-\item 13th to 16th April: ISBI 2016.
-\end{itemize}
 \end{frame}
+
+
 
 \begin{frame}{Camelyon16}
 
@@ -262,10 +620,6 @@ Two evaluation metrics and two leader boards. \\
 \end{itemize}
 \end{frame}
 
-\section{Technical difficulties}
-
-\subsection{Large Tiff files}
-
 \begin{frame}{The data set}
 \begin{columns}[T] % align columns
 \begin{column}{.5\textwidth}
@@ -301,41 +655,6 @@ Data set provided:
 
 \end{frame}
 
-\begin{frame}{Example}
-\begin{columns}[T] % align columns
-\begin{column}{.3\textwidth}
-\begin{figure}[!ht]
-\centering
-\includegraphics[width=\textwidth]{Tumor_31.png}
-\caption{Tumor 31}
-\textit{7000 x 3500, resolution 6}
-\label{}
-\end{figure}
-\end{column}%
-\hfill%
-\begin{column}{.3\textwidth}
-\begin{figure}[!ht]
-\centering
-\includegraphics[width=\textwidth]{Tumor_31_res0.png}
-\caption{Sub-image of Tumor 31, highest resolution}
-\textit{1000 x 1000, resolution 0}
-\label{}
-\end{figure}
-\end{column}%
-\hfill%
-\begin{column}{.3\textwidth}
-\begin{figure}[!ht]
-\centering
-\includegraphics[width=\textwidth]{Tumor_31_res0_zoom.png}
-\caption{Sub-image of Tumor 31, highest resolution (zoom)}
-\textit{100 x 100, resolution 0}
-\label{}
-\end{figure}
-\end{column}%
-\end{columns}
-\end{frame}
-
-\subsection{Difficulties linked to imaging}
 
 \begin{frame}{Images}
 \textcolor{red}{Very large number of samples:}
@@ -345,15 +664,8 @@ Data set provided:
 \end{itemize}
 \end{frame}
 
-\section{Workflow}
 
-\subsection{Summary}
-\begin{frame}{Summary}
-Their was a workflow graph
-\end{frame}
-
-\subsection{Subsampling 1}
-\begin{frame}{Subsampling}
+\begin{frame}{Subsampling 1}
 \textcolor{red}{Subsampling 1} (region of interest detection over slides)
 Trying to find interesting part of the image. \\
 We can divide sub-images in 4 groups.
@@ -364,6 +676,7 @@ We can divide sub-images in 4 groups.
 \item Centered on the boarder tissue/background.
 \end{itemize}
 \end{frame}
+
 \begin{frame}{Subsampling}
 
 \begin{columns}[T] % align columns
@@ -402,43 +715,6 @@ We can divide sub-images in 4 groups.
 \end{columns}
 \end{frame}
 
-\subsection{Ilastik features}
-
-\begin{frame}{Ilastik}
-\begin{columns}[T] % align columns
-\begin{column}{.8\textwidth}
-
-Ilastik : software for interactive image classification, segmentation and analysis. \\
-Using features from ilastik (implemented in vigra, c++ library)
-\begin{itemize}
-\item Color/Intensity:
-\begin{itemize}
-\item [--] Gaussian Smoothing
-\end{itemize}
-\item Edge:
-\begin{itemize}
-\item [--] Laplacian of Gaussian
-\item [--] Difference of Gaussians
-\item [--] Gaussian Gradiant Magnitude
-\end{itemize}
-\item Texture:
-\begin{itemize}
-\item [--] Structure Tensor Eigenvalues
-\item [--] Hessian of Gaussian Eigenvalues
-\end{itemize}
-\end{itemize}
-\end{column}%
-\begin{column}{.2\textwidth}
-\begin{figure}[!ht]
-\centering
-\includegraphics[width=\textwidth]{Ilastik.png}
-\caption{Ilastik}
-\label{}
-\end{figure}
-\end{column}%
-\end{columns}
-\end{frame}
-
 \begin{frame}{Ilastik - examples}
 \begin{columns}[T] % align columns
 \begin{column}{.8\textwidth}
@@ -464,22 +740,6 @@ Using features from ilastik (implemented in vigra, c++ library)
 \end{figure}
 \end{column}%
 \end{columns}
-\end{frame}
-
-\subsection{Superpixels/Waterpixels based features}
-
-\begin{frame}{Superpixels/Waterpixels}
-Superpixels: Regions resulting from a low-level segmentation. 
-They have these proprieties: \textcolor{red}{homogeneity, connected partitions, adherence to object boundaries, regularity}.
-\begin{figure}[!ht]
-\centering
-\includegraphics[width=\textwidth]{Waterpixels.png}
-\caption{Illustration of how superpixels are used}
-\label{}
-\end{figure}
-\begin{small}
-\textcolor{green}{Paper}: \textit{Waterpixels}, V. Machairas, M. Faessel, D. Cardenas-Pena, T. Chabardes, T. Walter and E. Decencière.
-\end{small}
 \end{frame}
 
 \begin{frame}{Waterpixels - examples}
@@ -515,16 +775,13 @@ They have these proprieties: \textcolor{red}{homogeneity, connected partitions, 
 \end{columns}
 \end{frame}
 
-\subsection{Subsampling 2}
 \begin{frame}{Subsampling 2}
 \textcolor{red}{Pixel classification}. \\
 Still very large data-set. \\
 260 slides $\rightarrow$ 100 sub-images per slides $\rightarrow$ 1 000 000 pixels per sub-images. \\
 Need for a second resampling. \\
-Resampling randomly? smartly, via unsupervised methods?
+Resampling randomly? smartly, via unsupervised methods? K means algorithm? 
 \end{frame}
-
-\subsection{Machine learning}
 
 \begin{frame}{Pixel based classifier}
 \textcolor{red}{Finding metastasis regions:}\\
@@ -548,7 +805,6 @@ $$\sum \frac{y_i+1}{2} \geqslant 1, \forall I \ s.t \ Y_I=1 \ \text{and} \ y_i=-
 \textcolor{green}{Implementation} : MISVM, Multiple-Instance Support Vector Machines by Gary Doran. Python package. \\
 \textcolor{green}{Paper}: \textit{Support Vector Machines for Multiple Instance learning}, S. Andrews, I. Tsochantaridis and T. Hofmann.
 \end{frame}
-
 
 
 \end{document}
