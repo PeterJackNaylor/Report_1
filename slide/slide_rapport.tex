@@ -1,6 +1,9 @@
 \documentclass{beamer}
-\usepackage{biblatex}
-\addbibresource{biblio}
+
+\usepackage[backend=bibtex]{biblatex}
+\bibliography{biblio.bib}
+
+
 \usepackage{color}
 %%to remove caption figure
 \usepackage{caption}
@@ -30,7 +33,7 @@
 
 \title{Towards image-based cancer signatures from histopathology data}
 
-%maybe add Supervisor
+%maybe add Supervisor\dfrac{•}{•}
 \subtitle{First year report}
 
 \author{Naylor Peter}
@@ -255,7 +258,7 @@ Main issue: As we wish this to be easily reproducible, the key problem is the se
 cancer, a special type of very aggressive breast cancer  \\
 \emph{Focus: treatment response to chemotherapy}.
 \item 198
-slides from a recently published study on bladder cancer \footcite{biton2014independent}.
+slides from a recently published study on bladder cancer \footfullcite{biton2014independent}.
 \emph{Focus: Correlation between histopathology features with the
 molecularly defined subgroups.}
 \end{enumerate}
@@ -533,7 +536,7 @@ Using features from ilastik (implemented in vigra, c++ library)
 \item Unsufficient to predict the higlhly variable metastasis tissue.
 \item Methods based on deep architecture achieved good performances.
 \item Learning which features are relevant is the key point.
-\item Next step: segmentation based on deep architecture, fully convolutionnal networks \cite{FCN}.
+\item Next step: segmentation based on deep architecture, fully convolutionnal networks \footfullcite{long2015fcn}.
 \end{itemize}
 \end{frame}
 
@@ -550,7 +553,8 @@ Using features from ilastik (implemented in vigra, c++ library)
 \end{frame}
 
 \begin{frame}{Data}
-Very similar data as Camelyon2016!
+Very similar data as Camelyon2016, but messier. 
+We had to better segment the tissue area.
 \begin{columns}[T] % align columns
 \begin{column}{.5\textwidth}
 \begin{figure}[!ht]
@@ -560,8 +564,14 @@ Very similar data as Camelyon2016!
 \label{fig: fab1}
 \end{figure}
 \end{column}%
-
-
+\begin{column}{.5\textwidth}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.9\textwidth]{slideFabien2.png}\par 
+\caption{Biopsy}
+\label{fig: fab2}
+\end{figure}
+\end{column}%
 \end{columns}
 
 
@@ -666,9 +676,7 @@ Data augmentation can make the network learn the proper invariances!
 
 \end{frame}
 
-\section{Conclusion}
-
-\subsection{Github and Jupyter notebook}
+\section{Github and Jupyter notebook}
 
 \begin{frame}{Jupyter notebook and Github}
 \url{https://github.com/PeterJackNaylor?tab=repositories}
@@ -960,9 +968,22 @@ They have these proprieties: \textcolor{red}{homogeneity, connected partitions, 
 \label{}
 \end{figure}
 \begin{small}
-For more details, see \cite{waterpixel}.
+For more details \footfullcite{waterpixels}.
 \end{small}
 \end{frame}
+
+
+\begin{frame}[noframenumbering]{Challenge results}
+We did a score of 22nd out of 23. \\
+Only three teams performed non-deep convolutionnal network. We were 2nd among these 3 teams.
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.5\textwidth]{ROC.png}
+\caption{ROC curve associated to the slide base evaluation}
+\label{Eval: ROC}
+\end{figure}
+\end{frame}
+
 \end{document}
 
 
