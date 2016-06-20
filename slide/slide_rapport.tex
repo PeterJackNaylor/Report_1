@@ -36,8 +36,8 @@
 %maybe add Supervisor\dfrac{•}{•}
 \subtitle{First year report}
 
-\author{Naylor Peter}
-
+%\author{Naylor Peter}
+\author[Naylor Peter]{Naylor Peter\\{\small Supervised by: T. Walter and F. Reyal}\\{\small Units: Center for Computational Biology and UMR900}}
 \date{8th of June 2016}
 
 \subject{THIS IS TRASH TRASH}
@@ -51,7 +51,7 @@
 
 \titlegraphic{\includegraphics[height=1.5cm]{Mines_ParisTech.png}~
 	  \includegraphics[height=1.5cm]{CURIE.jpg}~
-	  \includegraphics[height=1.5cm]{INSERM.jpg}}
+	  \includegraphics[height=0.7cm]{INSERM.jpg}}
 \begin{document}
 
 \begin{frame}
@@ -66,32 +66,28 @@
 % Section and subsections will appear in the presentation overview
 % and table of contents.
 \section{Introduction}
-\subsection{Cancer Research}
-%%% 2 frames approx
-%Here I will be talking about cancer and why cancer research is important
-\begin{frame}{Cancer research}
-\begin{enumerate}
-\item Cancer $\Longleftrightarrow$ disease of the genome. \\ 
-Early 2000, first sequencing.
-\item Very heterogeneous disease. 2 breast cancers can be totally different on a molecular basis. Disease highly variable in many aspects. Emergence of personalized medicine. 
-\item Clinical motivation for cancer research: profiling each type of tumor, in terms of molecular subtype and prognostic in order features. $\Longrightarrow$ Better understanding, diagnostic, prognostic, ...
-\end{enumerate}
-\end{frame}
-
-\begin{frame}{Why image based features in cancer research}
+\begin{frame}{Introduction}
+Image data in biology or in medicine can be acquired in these settings:
 \begin{itemize}
-\item In clinical practice, one looks at the available image data to give a treatment. 
-\item Finding correspondence/correlations between genes and phenotypic information. 
-\item Highly relevant data can be found. \\
+\item Fundamental research, through home brewed experiments: 
+
 \begin{itemize}
-\item We can cross protein localization microscopy with loss-of-function experiment.
-\item You access response to disease information, lymphocyte responses to tumor expansion. Different type of information, spatial repartition, neighbouring information, density, ..
-\item Correcting noisy molecular data, mutation data will be mixture of healthy cells, cancerous cells, lymphocytes,...
+\item[--] Microscopy data of cell cultures.
+\item[--] In High content screening, many films (thousands) of experiments undergoing a different change.
 \end{itemize}
+
+\item In clinical practice: through practice of general medicine: 
+\begin{itemize}
+\item[--] Tissue scans, such as histopathology slide (PhD project)
+\item[--] Photographs
+\item[--] MRI scans
+\item[--] Ultrasound \\
+Etc
 \end{itemize}
+
+\end{itemize}
+
 \end{frame}
-
-
 \subsection{Masters/Side project}
 %%% 3 slides
 %%% About the master project
@@ -220,6 +216,35 @@ To assess our predicition, we looked at different cell cycle phases length out o
 \end{frame}
 
 
+
+\subsection{Cancer Research}
+%%% 2 frames approx
+%Here I will be talking about cancer and why cancer research is important
+\begin{frame}{Cancer research}
+\begin{enumerate}
+\item Cancer is a disease of the genome. \\ 
+In the early 2000, first sequencing of the human genome.
+\item Cancer is a very heterogeneous disease. 2 breast cancers can be totally different on a molecular basis. This disease is highly variable in many aspects, we therefore saw the emergence of personalized medicine. 
+\item The clinical motivation for cancer research are: profiling each type of tumor, in terms of molecular subtype and prognostic in order features. On the long run this will lead to a better understanding, diagnostic, prognostic, ...
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Why image based features in cancer research}
+\begin{itemize}
+\item In clinical practice, one looks at the available image data to give a treatment. 
+\item Differently, in clinical research, one studies the images to infer properties.
+\item Finding correspondence/correlations between genes and phenotypic information. 
+\item Highly relevant data can be found. \\
+\begin{itemize}
+\item We can cross protein localization microscopy with loss-of-function experiment.
+\item You access response to disease information, lymphocyte responses to tumor expansion. Different type of information, spatial repartition, neighbouring information, density, ..
+\item Correcting noisy molecular data, mutation data will be mixture of healthy cells, cancerous cells, lymphocytes,...
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
 \section{Phd Subject}
 %Here I will talk about my phd subject
 %%% 3 frames approx
@@ -321,7 +346,7 @@ molecularly defined subgroups.}
 \end{figure}
 \end{column}%
 \end{columns}
-{\centering \textit{Tissue sections with standar Haematoxylin and Eosin staining}} 
+{\centering \textit{Tissue sections with standard Haematoxylin and Eosin staining}} 
 \begin{itemize}
 \item [--] High variability in staining.
 \item [--] High variability in tissue objects.
@@ -531,7 +556,7 @@ Using features from ilastik (implemented in vigra, c++ library)
 
 \begin{frame}{Results and perspective}
 \begin{itemize}
-\item We had an AUC score of 0.56.
+\item We had an AUC score of $0,63$.
 \item Our features are based ilastik/waterpixels at different scales.
 \item Unsufficient to predict the higlhly variable metastasis tissue.
 \item Methods based on deep architecture achieved good performances.
@@ -636,7 +661,7 @@ We had to better segment the tissue area.
 
 \end{columns}
 
-Data augmentation can make the network learn the proper invariances!
+Data augmentation can make the network learn the proper invariances! \footfullcite{UNet}.
 %
 %\begin{figure}
 %\begin{multicols}{6}
